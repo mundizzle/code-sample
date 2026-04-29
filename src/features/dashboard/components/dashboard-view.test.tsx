@@ -32,6 +32,18 @@ describe("DashboardView", () => {
     expect(screen.getByText("Launches This Month")).toBeInTheDocument();
     expect(screen.getByText("Health Trend")).toBeInTheDocument();
     expect(screen.getByText("Risk Distribution")).toBeInTheDocument();
+    expect(screen.getByText("Budget vs Timeline")).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "Weekly delivery health scores" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "Open risk distribution by severity" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", {
+        name: "Project budget used compared with timeline used",
+      }),
+    ).toBeInTheDocument();
     expect(await screen.findAllByText("Resident Services Hub")).toHaveLength(2);
     expect(screen.getByText("Selected Project")).toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Project list" })).toBeInTheDocument();

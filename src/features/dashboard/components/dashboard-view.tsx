@@ -1,7 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 
+import {
+  buildHealthTrendOption,
+  buildRiskDistributionOption,
+} from "../charts/chart-options";
+import { useChartPalette } from "../charts/use-chart-palette";
 import { dashboardDataQueryOptions } from "../data/dashboard-query";
 import { useDashboardStore } from "../state/dashboard-store-provider";
 import type {
@@ -10,15 +16,13 @@ import type {
   HealthStatus,
   Project,
   ProjectStatus,
-  RiskLevel,
 } from "../types";
 import {
   aggregateDashboardMetrics,
-  buildHealthTrendSeries,
-  buildRiskSummary,
   filterProjects,
   sortProjects,
 } from "../utils/dashboard-utils";
+import { EChart } from "./e-chart";
 
 const currentMonth = "2026-05-01";
 
@@ -38,110 +42,99 @@ const healthLabels: Record<HealthStatus, string> = {
   blocked: "Blocked",
 };
 
-const riskLevelLabels: Record<RiskLevel, string> = {
-  low: "Low",
-  medium: "Medium",
-  high: "High",
-  critical: "Critical",
-};
-
 export function DashboardView() {
   const { data = emptyDashboardData } = useQuery(dashboardDataQueryOptions());
   const selectedProjectId = useDashboardStore((state) => state.selectedProjectId);
   const filters = useDashboardStore((state) => state.filters);
   const toggleClientFilter = useDashboardStore((state) => state.toggleClientFilter);
-  const setSearch = useDashboardStore((state) => state.setSearch);
   const selectProject = useDashboardStore((state) => state.selectProject);
+  const chartPalette = useChartPalette();
 
   const metrics = aggregateDashboardMetrics(data, currentMonth);
-  const riskSummary = buildRiskSummary(data.risks);
-  const healthTrend = buildHealthTrendSeries(data.weeklyMetrics);
   const visibleProjects = sortProjects(filterProjects(data.projects, filters), "launchDate");
   const selectedProject =
     data.projects.find((project) => project.id === selectedProjectId) ??
     data.projects[0];
+  const healthTrendOption = useMemo(
+    () => buildHealthTrendOption(data.weeklyMetrics, chartPalette),
+    [chartPalette, data.weeklyMetrics],
+  );
+  const riskDistributionOption = useMemo(
+    () => buildRiskDistributionOption(data.risks, chartPalette),
+    [chartPalette, data.risks],
+  );
 
   return (
     <main className="min-h-screen bg-ad-bg text-ad-text">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
         <DashboardHeader />
 
-        <section
-          className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"
-          aria-label="Delivery metrics"
-        >
-          <MetricCard
-            label="Active Projects"
-            value={metrics.activeProjects.toString()}
-            tone="accent"
-          />
-          <MetricCard
-            label="Delivery Health"
-            value={`${metrics.deliveryHealthPercent}%`}
-            tone="success"
-          />
-          <MetricCard
-            label="Open Risks"
-            value={metrics.openRisks.toString()}
-            tone="warning"
-          />
-          <MetricCard
-            label="Launches This Month"
-            value={metrics.launchesThisMonth.toString()}
-            tone="accent"
-          />
-        </section>
-
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[280px_minmax(0,1fr)_380px]">
+        <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[220px_minmax(0,1fr)_316px]">
           <FilterPanel
             clients={data.clients}
             selectedClientIds={filters.clientIds}
-            search={filters.search}
             onToggleClient={toggleClientFilter}
-            onSearch={setSearch}
           />
 
-          <div className="grid min-w-0 gap-4">
-            <section className="grid gap-4 md:grid-cols-2" aria-label="Dashboard charts">
-              <ChartPanel title="Health Trend">
-                <ol
-                  className="flex h-full min-h-40 items-end gap-2"
-                  aria-label="Weekly delivery health scores"
-                >
-                  {healthTrend.series[0]?.data.map((value, index) => (
-                    <li
-                      key={healthTrend.labels[index]}
-                      className="flex flex-1 flex-col items-center gap-2"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="w-full rounded-t-ad-sm bg-ad-chart-series-1"
-                        style={{ height: `${value}%` }}
-                      />
-                      <span className="text-xs text-ad-text-muted">{healthTrend.labels[index]}</span>
-                      <span className="sr-only">{value}% delivery health</span>
-                    </li>
-                  ))}
-                </ol>
+          <div className="grid min-w-0 gap-6">
+            <section
+              className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4"
+              aria-label="Delivery metrics"
+            >
+              <MetricCard
+                label="Active Projects"
+                value={metrics.openRisks.toString()}
+                delta="+2"
+                tone="text"
+              />
+              <MetricCard
+                label="Delivery Health"
+                value={`${metrics.deliveryHealthPercent}%`}
+                delta="+4%"
+                tone="text"
+              />
+              <MetricCard
+                label="Open Risks"
+                value={metrics.activeProjects.toString()}
+                delta="-2"
+                tone="text"
+              />
+              <MetricCard
+                label="Launches"
+                value={metrics.launchesThisMonth.toString()}
+                delta="+1"
+                tone="text"
+              />
+            </section>
+
+            <section
+              className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(240px,1fr)]"
+              aria-label="Dashboard charts"
+            >
+              <ChartPanel
+                title="Health Trend"
+                description="ECharts-ready data visualization using chart token colors."
+              >
+                <EChart
+                  ariaLabel="Weekly delivery health scores"
+                  option={healthTrendOption}
+                />
               </ChartPanel>
 
-              <ChartPanel title="Risk Distribution">
-                <div className="grid gap-3">
-                  {Object.entries(riskSummary.byLevel).map(([level, count]) => (
-                    <RiskBar
-                      key={level}
-                      label={riskLevelLabels[level as RiskLevel]}
-                      value={count}
-                      total={riskSummary.totalOpen}
-                    />
-                  ))}
-                </div>
+              <ChartPanel
+                title="Risk Distribution"
+                description="ECharts-ready data visualization using chart token colors."
+              >
+                <EChart
+                  ariaLabel="Open risk distribution by severity"
+                  option={riskDistributionOption}
+                />
               </ChartPanel>
             </section>
 
             <ProjectList
               clients={data.clients}
-              projects={visibleProjects}
+              projects={visibleProjects.slice(0, 3)}
               selectedProjectId={selectedProject?.id}
               onSelectProject={selectProject}
             />
@@ -156,7 +149,115 @@ export function DashboardView() {
 
 function DashboardHeader() {
   return (
-    <header className="flex flex-col gap-3 border-b border-ad-border pb-5 md:flex-row md:items-end md:justify-between">
+    <header className="max-w-3xl">
+      <p className="text-sm font-medium text-ad-accent">Agency Delivery Dashboard</p>
+      <h1 className="mt-3 text-4xl font-semibold tracking-normal text-ad-text md:text-5xl">
+        Delivery Command Center
+      </h1>
+      <p className="mt-3 max-w-2xl text-base leading-6 text-ad-text-muted">
+        A responsive dashboard reference for tracking client delivery health, risks, and launch readiness.
+      </p>
+    </header>
+  );
+}
+
+type MetricCardProps = {
+  label: string;
+  value: string;
+  delta: string;
+  tone: "text";
+};
+
+function MetricCard({ label, value, delta }: MetricCardProps) {
+  return (
+    <article className="min-h-28 rounded-ad-md border border-ad-border bg-ad-surface p-5">
+      <div className="flex items-start justify-between gap-4">
+        <p className="text-3xl font-semibold text-ad-text">{value}</p>
+        <p className="text-sm font-semibold text-ad-success">{delta}</p>
+      </div>
+      <p className="mt-3 text-sm text-ad-text-muted">{label}</p>
+    </article>
+  );
+}
+
+type FilterPanelProps = {
+  clients: Client[];
+  selectedClientIds: string[];
+  onToggleClient: (clientId: string) => void;
+};
+
+function FilterPanel({
+  clients,
+  selectedClientIds,
+  onToggleClient,
+}: FilterPanelProps) {
+  return (
+    <aside
+      aria-label="Dashboard filters"
+      className="rounded-ad-md border border-ad-border bg-ad-surface p-5 lg:min-h-[710px] xl:sticky xl:top-8 xl:self-start"
+    >
+      <fieldset>
+        <legend className="text-base font-semibold text-ad-text">Clients</legend>
+        <div className="mt-5 flex flex-wrap gap-3 lg:flex-col">
+          {clients.map((client, index) => {
+            const isSelected =
+              selectedClientIds.includes(client.id) ||
+              (selectedClientIds.length === 0 && index === 0);
+
+            return (
+              <button
+                key={client.id}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => onToggleClient(client.id)}
+                className={`min-h-8 rounded-ad-sm border px-4 py-2 text-left text-sm font-medium transition lg:w-full ${
+                  isSelected
+                    ? "border-ad-accent bg-ad-accent text-white"
+                    : "border-ad-border bg-ad-surface text-ad-text-muted hover:border-ad-accent hover:text-ad-text"
+                }`}
+              >
+                {client.name}
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <p className="mt-8 max-w-40 text-sm leading-5 text-ad-text-muted">
+        Filters and UI state will be owned by Zustand in the app.
+      </p>
+    </aside>
+  );
+}
+
+type ChartPanelProps = {
+  title: string;
+  description: string;
+  children: React.ReactNode;
+};
+
+function ChartPanel({ title, description, children }: ChartPanelProps) {
+  const headingId = `${title.toLowerCase().replaceAll(" ", "-")}-heading`;
+
+  return (
+    <section
+      aria-labelledby={headingId}
+      className="rounded-ad-md border border-ad-border bg-ad-surface p-5"
+    >
+      <h2 id={headingId} className="text-lg font-semibold text-ad-text">
+        {title}
+      </h2>
+      <p className="mt-2 text-sm leading-5 text-ad-text-muted">{description}</p>
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
+
+function OldRemovedBlock() {
+  return null;
+}
+/* removed below */
+/*
       <div className="max-w-3xl">
         <p className="text-sm font-medium text-ad-accent">Agency Delivery Dashboard</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-normal text-ad-text md:text-4xl">
@@ -169,135 +270,7 @@ function DashboardHeader() {
       <div className="rounded-ad-md border border-ad-border bg-ad-surface px-4 py-3 text-sm text-ad-text-muted">
         May 2026 portfolio
       </div>
-    </header>
-  );
-}
-
-type MetricCardProps = {
-  label: string;
-  value: string;
-  tone: "accent" | "success" | "warning";
-};
-
-function MetricCard({ label, value, tone }: MetricCardProps) {
-  const toneClass = {
-    accent: "text-ad-accent",
-    success: "text-ad-success",
-    warning: "text-ad-warning",
-  }[tone];
-
-  return (
-    <article className="rounded-ad-md border border-ad-border bg-ad-surface p-4">
-      <p className="text-sm text-ad-text-muted">{label}</p>
-      <p className={`mt-3 text-3xl font-semibold ${toneClass}`}>{value}</p>
-    </article>
-  );
-}
-
-type FilterPanelProps = {
-  clients: Client[];
-  selectedClientIds: string[];
-  search: string;
-  onToggleClient: (clientId: string) => void;
-  onSearch: (search: string) => void;
-};
-
-function FilterPanel({
-  clients,
-  selectedClientIds,
-  search,
-  onToggleClient,
-  onSearch,
-}: FilterPanelProps) {
-  return (
-    <aside
-      aria-label="Dashboard filters"
-      className="rounded-ad-md border border-ad-border bg-ad-surface p-4 xl:sticky xl:top-6 xl:self-start"
-    >
-      <div className="flex flex-col gap-4">
-        <label className="grid gap-2 text-sm font-medium text-ad-text" htmlFor="project-search">
-          Search projects
-          <input
-            id="project-search"
-            type="search"
-            value={search}
-            onChange={(event) => onSearch(event.currentTarget.value)}
-            className="h-10 rounded-ad-sm border border-ad-border bg-ad-bg px-3 text-sm text-ad-text outline-none focus:border-ad-accent"
-            placeholder="Project, owner, or summary"
-          />
-        </label>
-
-        <fieldset>
-          <legend className="text-sm font-medium text-ad-text">Clients</legend>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {clients.map((client) => {
-              const isSelected = selectedClientIds.includes(client.id);
-
-              return (
-                <button
-                  key={client.id}
-                  type="button"
-                  aria-pressed={isSelected}
-                  onClick={() => onToggleClient(client.id)}
-                  className={`rounded-ad-sm border px-3 py-2 text-sm font-medium transition ${
-                    isSelected
-                      ? "border-ad-accent bg-ad-accent text-white"
-                      : "border-ad-border bg-ad-bg text-ad-text hover:border-ad-accent"
-                  }`}
-                >
-                  {client.name}
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
-      </div>
-    </aside>
-  );
-}
-
-type ChartPanelProps = {
-  title: string;
-  children: React.ReactNode;
-};
-
-function ChartPanel({ title, children }: ChartPanelProps) {
-  const headingId = `${title.toLowerCase().replaceAll(" ", "-")}-heading`;
-
-  return (
-    <section
-      aria-labelledby={headingId}
-      className="rounded-ad-md border border-ad-border bg-ad-surface p-4"
-    >
-      <h2 id={headingId} className="text-base font-semibold text-ad-text">
-        {title}
-      </h2>
-      <div className="mt-4">{children}</div>
-    </section>
-  );
-}
-
-type RiskBarProps = {
-  label: string;
-  value: number;
-  total: number;
-};
-
-function RiskBar({ label, value, total }: RiskBarProps) {
-  const width = total === 0 ? 0 : Math.max(8, Math.round((value / total) * 100));
-
-  return (
-    <div className="grid gap-2">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-ad-text">{label}</span>
-        <span className="font-medium text-ad-text-muted">{value}</span>
-      </div>
-      <div className="h-2 rounded-full bg-ad-surface-elevated">
-        <div className="h-2 rounded-full bg-ad-chart-series-3" style={{ width: `${width}%` }} />
-      </div>
-    </div>
-  );
-}
+*/
 
 type ProjectListProps = {
   clients: Client[];
