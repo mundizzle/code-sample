@@ -66,6 +66,7 @@ This foundation intentionally keeps the default Next.js starter page. The dashbo
 ## Validation
 
 ```bash
+npm run test
 npm run lint
 npm run build
 ```

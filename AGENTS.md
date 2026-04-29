@@ -31,11 +31,9 @@ Last confirmed state:
 
 Next commit cycle:
 
-- Phase 1A: add the unit-test harness and domain model.
-- Use Vitest for Phase 1 pure utility TDD. This is not installed by default in `create-next-app`, but it is an officially documented Next.js testing path and is a small, justified addition for plain TypeScript utility tests.
-- Add `npm run test` and `npm run test:watch` when Vitest lands.
-- Create `src/features/dashboard/types.ts` before building UI.
-- Prefer the first real test over a throwaway smoke test if the domain shape is clear.
+- Phase 1A is complete: Vitest is installed, `npm run test` / `npm run test:watch` exist, and `src/features/dashboard/types.ts` defines the initial dashboard domain model.
+- The first test is a domain contract test for client/project/dashboard data shape.
+- Next: move into Phase 1B fixtures and utility TDD.
 
 Phase 1B:
 
@@ -54,6 +52,15 @@ Phase 1B:
 - White labeling is a future brand axis, separate from light/dark appearance.
 - Keep Server Components as the default; push `"use client"` as low as possible.
 - Keep the default scaffold shape unless the sample needs a specific change.
+
+## TDD Guardrails
+
+- Follow TDD through every phase, not only Phase 1 utilities.
+- For each behavior, write or update the failing test first, implement the smallest useful change, then refactor while keeping tests green.
+- Prefer behavior tests over snapshot-heavy coverage. Use type/domain contract tests where runtime behavior is not yet meaningful.
+- For UI phases, add focused component or interaction tests before implementing the component behavior; Storybook stories complement tests but do not replace them.
+- For charts and data boundaries, keep option builders, selectors, and state transitions testable as pure functions wherever possible.
+- Every phase checkpoint should run `npm run test`, `npm run lint`, and `npm run build` before being considered complete.
 
 ## Required Agent Guidance
 
@@ -108,6 +115,7 @@ npm run build-storybook
 - Add an app provider for TanStack Query and future client providers.
 - Add Zustand for UI-only state: selected client, selected project, filters, date range, chart mode, and mobile panel state.
 - Do not persist dashboard state unless there is a product reason.
+- TDD provider wiring and store actions before using them in the dashboard UI.
 
 ### Phase 3: Responsive UI
 
@@ -115,12 +123,14 @@ npm run build-storybook
 - Build dashboard components: header, filter rail, project list/table, project detail panel, risk summary, delivery chart.
 - Implement mobile, tablet, and desktop layouts.
 - Include one component-level container query example for `ProjectDetailPanel`.
+- TDD key component states and interactions before styling refinements.
 
 ### Phase 4: Charts
 
 - Add ECharts through a client-only wrapper.
 - Keep ECharts option builders pure and unit-tested.
 - Include health trend, risk distribution, and budget-vs-timeline comparison.
+- TDD chart option builders before wiring ECharts rendering.
 
 ### Phase 5: Documentation + Release
 
