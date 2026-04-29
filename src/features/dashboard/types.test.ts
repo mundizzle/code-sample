@@ -17,6 +17,8 @@ describe("dashboard domain model", () => {
       clientId: client.id,
       name: "Client portal redesign",
       status: "in-progress",
+      owner: "Mundi Morgado",
+      summary: "Portal workstream with accessibility and launch readiness checkpoints.",
       startDate: "2026-01-12",
       targetLaunchDate: "2026-05-08",
       budgetUsd: 240000,

@@ -9,8 +9,8 @@ This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conv
 ## Current Phase
 
 - [x] Phase 0: Foundation + deploy preparation
-- [ ] Phase 1: Data model, fixtures, and pure utilities (current)
-- [ ] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary
+- [x] Phase 1: Data model, fixtures, and pure utilities
+- [ ] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary (current)
 - [ ] Phase 3: Responsive dashboard layout and components
 - [ ] Phase 4: ECharts integration
 - [ ] Phase 5: Tests, Storybook, README polish, and final deploy
@@ -28,18 +28,19 @@ Last confirmed state:
 - `PLAN.md` has been removed; `AGENTS.md` is the active operating guide.
 - `CLAUDE.md` is only a compatibility pointer to `AGENTS.md`.
 - `docs/design-to-dev-workflow.md` explains the Figma Variables to Tailwind token flow.
+- Current Figma reference was checked during Phase 1B. The file had `Dashboard Reference` frames for mobile/tablet/desktop, design tokens, component inventory, container query example, and implementation notes.
 
-Next commit cycle:
+Completed Phase 1:
 
 - Phase 1A is complete: Vitest is installed, `npm run test` / `npm run test:watch` exist, and `src/features/dashboard/types.ts` defines the initial dashboard domain model.
 - The first test is a domain contract test for client/project/dashboard data shape.
-- Next: move into Phase 1B fixtures and utility TDD.
+- Phase 1B is complete: `src/features/dashboard/data/fixtures.ts` contains Figma-aligned dashboard fixtures, and `src/features/dashboard/utils/dashboard-utils.ts` contains tested pure utilities for filtering, sorting, health scoring, KPI aggregation, risk summary, and health-trend series.
 
-Phase 1B:
+Next commit cycle:
 
-- TDD the pure utilities one behavior at a time: write a failing test, implement the smallest useful function, then refactor if needed.
-- Start with `filterProjects`, then `sortProjects`, `calculateProjectHealth`, `aggregateDashboardMetrics`, `buildRiskSummary`, and `buildHealthTrendSeries`.
-- Do not start the dashboard UI until the typed fixtures and utility tests are in place.
+- Phase 2: add TanStack Query and Zustand boundaries.
+- Continue TDD: provider wiring and store actions should get tests before being used in UI.
+- Keep the app route on the stock scaffold until the Phase 3 dashboard layout begins.
 
 ## Stack Guardrails
 
@@ -52,6 +53,7 @@ Phase 1B:
 - White labeling is a future brand axis, separate from light/dark appearance.
 - Keep Server Components as the default; push `"use client"` as low as possible.
 - Keep the default scaffold shape unless the sample needs a specific change.
+- Before each data or UI phase, inspect the current Figma file so implementation follows the live design rather than stale notes.
 
 ## TDD Guardrails
 
@@ -87,7 +89,7 @@ npm run lint
 npm run build
 ```
 
-Add these during Phase 1A:
+Available after Phase 1A:
 
 ```bash
 npm run test

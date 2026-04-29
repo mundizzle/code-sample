@@ -20,6 +20,17 @@ export const riskLevels = ["low", "medium", "high", "critical"] as const;
 
 export type RiskLevel = (typeof riskLevels)[number];
 
+export const riskCategories = [
+  "accessibility",
+  "content",
+  "data",
+  "dependency",
+  "scope",
+  "staffing",
+] as const;
+
+export type RiskCategory = (typeof riskCategories)[number];
+
 export const milestoneStatuses = ["upcoming", "in-progress", "done", "missed"] as const;
 
 export type MilestoneStatus = (typeof milestoneStatuses)[number];
@@ -47,6 +58,8 @@ export type Project = {
   clientId: EntityId;
   name: string;
   status: ProjectStatus;
+  owner: string;
+  summary: string;
   startDate: IsoDate;
   targetLaunchDate: IsoDate;
   budgetUsd: number;
@@ -70,6 +83,7 @@ export type Risk = {
   projectId: EntityId;
   title: string;
   level: RiskLevel;
+  category: RiskCategory;
   owner: string;
   openedAt: IsoDate;
   mitigation: string;
