@@ -51,6 +51,8 @@ Next commit cycle:
 - Tailwind v4 with CSS-first `@theme`.
 - Figma Variables are the design source; exported token files live in `design-tokens/`.
 - Generate Tailwind variables with `npm run generate-tailwind-theme`.
+- Prefer Tailwind utilities backed by semantic `ad-*` tokens for colors, radii, and spacing wherever those tokens exist.
+- Use raw Tailwind values only for structural layout, responsive breakpoints, one-off grid tracks, or values not yet represented in the token set.
 - Appearance follows `prefers-color-scheme`; do not add an in-app theme switcher.
 - White labeling is a future brand axis, separate from light/dark appearance.
 - Keep Server Components as the default; push `"use client"` as low as possible.
