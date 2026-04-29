@@ -10,8 +10,8 @@ This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conv
 
 - [x] Phase 0: Foundation + deploy preparation
 - [x] Phase 1: Data model, fixtures, and pure utilities
-- [ ] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary (current)
-- [ ] Phase 3: Responsive dashboard layout and components
+- [x] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary
+- [ ] Phase 3: Responsive dashboard layout and components (current)
 - [ ] Phase 4: ECharts integration
 - [ ] Phase 5: Tests, Storybook, README polish, and final deploy
 
@@ -35,12 +35,13 @@ Completed Phase 1:
 - Phase 1A is complete: Vitest is installed, `npm run test` / `npm run test:watch` exist, and `src/features/dashboard/types.ts` defines the initial dashboard domain model.
 - The first test is a domain contract test for client/project/dashboard data shape.
 - Phase 1B is complete: `src/features/dashboard/data/fixtures.ts` contains Figma-aligned dashboard fixtures, and `src/features/dashboard/utils/dashboard-utils.ts` contains tested pure utilities for filtering, sorting, health scoring, KPI aggregation, risk summary, and health-trend series.
+- Phase 2 is complete: TanStack Query and Zustand are installed, `src/app/providers.tsx` wires client providers below the root layout, `src/features/dashboard/data/dashboard-query.ts` owns fixture-backed dashboard query options, and `src/features/dashboard/state/dashboard-store.ts` owns UI-only dashboard state through a per-instance Zustand vanilla store.
 
 Next commit cycle:
 
-- Phase 2: add TanStack Query and Zustand boundaries.
-- Continue TDD: provider wiring and store actions should get tests before being used in UI.
-- Keep the app route on the stock scaffold until the Phase 3 dashboard layout begins.
+- Phase 3: build the responsive dashboard layout and components from the current Figma reference.
+- Continue TDD: component states and interactions should get focused tests before styling refinements.
+- The app route may now move off the stock scaffold as Phase 3 layout work begins.
 
 ## Stack Guardrails
 
