@@ -86,14 +86,14 @@ export function createDashboardStore(
       set((state) => ({
         filters: {
           ...state.filters,
-          statuses,
+          statuses: [...statuses],
         },
       })),
     setHealthFilters: (healthStatuses) =>
       set((state) => ({
         filters: {
           ...state.filters,
-          healthStatuses,
+          healthStatuses: [...healthStatuses],
         },
       })),
     setSearch: (search) =>
@@ -103,7 +103,7 @@ export function createDashboardStore(
           search,
         },
       })),
-    setDateRange: (dateRange) => set({ dateRange }),
+    setDateRange: (dateRange) => set({ dateRange: { ...dateRange } }),
     setChartMode: (chartMode) => set({ chartMode }),
     setMobileDetailOpen: (isMobileDetailOpen) => set({ isMobileDetailOpen }),
     resetFilters: () =>

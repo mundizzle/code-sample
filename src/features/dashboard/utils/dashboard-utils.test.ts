@@ -93,6 +93,27 @@ describe("aggregateDashboardMetrics", () => {
       launchesThisMonth: 3,
     });
   });
+
+  it("returns stable empty metrics when no active projects exist", () => {
+    expect(
+      aggregateDashboardMetrics(
+        {
+          clients: [],
+          projects: [],
+          milestones: [],
+          risks: [],
+          weeklyMetrics: [],
+          teamAllocations: [],
+        },
+        "2026-05-01",
+      ),
+    ).toEqual({
+      activeProjects: 0,
+      deliveryHealthPercent: 0,
+      openRisks: 0,
+      launchesThisMonth: 0,
+    });
+  });
 });
 
 describe("buildRiskSummary", () => {

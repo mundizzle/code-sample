@@ -109,10 +109,12 @@ export function aggregateDashboardMetrics(
     (sum, project) => sum + project.health.score,
     0,
   );
+  const deliveryHealthPercent =
+    activeProjects.length === 0 ? 0 : Math.round(totalHealth / activeProjects.length);
 
   return {
     activeProjects: activeProjects.length,
-    deliveryHealthPercent: Math.round(totalHealth / activeProjects.length),
+    deliveryHealthPercent,
     openRisks: data.risks.filter((risk) => risk.isOpen).length,
     launchesThisMonth: activeProjects.filter((project) =>
       project.targetLaunchDate.startsWith(monthPrefix),

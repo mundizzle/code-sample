@@ -11,8 +11,8 @@ This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conv
 - [x] Phase 0: Foundation + deploy preparation
 - [x] Phase 1: Data model, fixtures, and pure utilities
 - [x] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary
-- [ ] Phase 3: Responsive dashboard layout and components (current)
-- [ ] Phase 4: ECharts integration
+- [x] Phase 3: Responsive dashboard layout and components
+- [ ] Phase 4: ECharts integration (current)
 - [ ] Phase 5: Tests, Storybook, README polish, and final deploy
 
 Update this checklist as phases are completed so future sessions can reorient quickly after context resets.
@@ -24,11 +24,11 @@ Last confirmed state:
 - GitHub repo is public and pushed: https://github.com/mundizzle/code-sample
 - Vercel production deployment is live: https://code-sample-three.vercel.app
 - Vercel is connected to the GitHub repo; pushes to `main` trigger production deployments.
-- The app intentionally still shows the default Next.js scaffold page.
+- The app now renders the first responsive dashboard UI on the home route.
 - `PLAN.md` has been removed; `AGENTS.md` is the active operating guide.
 - `CLAUDE.md` is only a compatibility pointer to `AGENTS.md`.
 - `docs/design-to-dev-workflow.md` explains the Figma Variables to Tailwind token flow.
-- Current Figma reference was checked during Phase 1B. The file had `Dashboard Reference` frames for mobile/tablet/desktop, design tokens, component inventory, container query example, and implementation notes.
+- Current Figma reference was checked during Phase 1B. A Phase 3 refresh attempt hit Figma REST rate limiting (`429`), so the layout was implemented from the recorded Dashboard Reference frames and content.
 
 Completed Phase 1:
 
@@ -36,12 +36,13 @@ Completed Phase 1:
 - The first test is a domain contract test for client/project/dashboard data shape.
 - Phase 1B is complete: `src/features/dashboard/data/fixtures.ts` contains Figma-aligned dashboard fixtures, and `src/features/dashboard/utils/dashboard-utils.ts` contains tested pure utilities for filtering, sorting, health scoring, KPI aggregation, risk summary, and health-trend series.
 - Phase 2 is complete: TanStack Query and Zustand are installed, `src/app/providers.tsx` wires client providers below the root layout, `src/features/dashboard/data/dashboard-query.ts` owns fixture-backed dashboard query options, and `src/features/dashboard/state/dashboard-store.ts` owns UI-only dashboard state through a per-instance Zustand vanilla store.
+- Phase 3 is complete: `src/app/page.tsx` renders `DashboardView`, with responsive KPI cards, semantic filter controls, chart placeholders, a project list, selected-project detail, and a `ProjectDetailPanel` container query example. Component tests use React Testing Library, jsdom, and user-event.
 
 Next commit cycle:
 
-- Phase 3: build the responsive dashboard layout and components from the current Figma reference.
-- Continue TDD: component states and interactions should get focused tests before styling refinements.
-- The app route may now move off the stock scaffold as Phase 3 layout work begins.
+- Phase 4: add ECharts through a client-only chart wrapper.
+- Continue TDD: chart option builders should be pure and tested before wiring ECharts rendering.
+- Inspect current Figma again before chart/UI refinements; the last live REST attempt was rate-limited.
 
 ## Stack Guardrails
 
@@ -54,6 +55,7 @@ Next commit cycle:
 - White labeling is a future brand axis, separate from light/dark appearance.
 - Keep Server Components as the default; push `"use client"` as low as possible.
 - Keep the default scaffold shape unless the sample needs a specific change.
+- Use mobile-first responsive classes and semantic, accessible HTML by default; this is part of the code sample's front-end fundamentals story.
 - Before each data or UI phase, inspect the current Figma file so implementation follows the live design rather than stale notes.
 
 ## TDD Guardrails
@@ -72,6 +74,9 @@ Before writing application code, use the relevant installed skills/guidance:
 - `vercel:nextjs` for App Router, Next.js 16, Server/Client Component, and deployment conventions.
 - `vercel:react-best-practices` after editing multiple TSX components.
 - `vercel:vercel-cli` before Vercel linking, deployment, logs, or project settings work.
+- `responsive-design` before responsive layout work.
+- `tailwind-design-system` before Tailwind component styling or token work.
+- `tanstack-query-best-practices` before query/data-boundary changes.
 - If any skill is unavailable in a future session, use `find-skills` or inspect official docs before proceeding.
 
 Also keep this Next.js warning active:
