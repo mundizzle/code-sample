@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run generate-tailwind-theme",
     "build": "next build",
+    "generate-tailwind-theme": "node scripts/generate-tailwind-theme.mjs",
     "start": "next start",
     "lint": "eslint"
   },
