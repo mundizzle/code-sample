@@ -8,8 +8,8 @@ This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conv
 
 ## Current Phase
 
-- [ ] Phase 0: Foundation + deploy preparation (current)
-- [ ] Phase 1: Data model, fixtures, and pure utilities
+- [x] Phase 0: Foundation + deploy preparation
+- [ ] Phase 1: Data model, fixtures, and pure utilities (current)
 - [ ] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary
 - [ ] Phase 3: Responsive dashboard layout and components
 - [ ] Phase 4: ECharts integration
@@ -102,3 +102,5 @@ npm run build-storybook
 - Vercel deployment should be GitHub-backed, not CLI-only.
 - Use default Vercel Next.js settings unless a concrete issue requires otherwise.
 - Validate before deployment with `npm run lint` and `npm run build`.
+- GitHub repo: https://github.com/mundizzle/code-sample
+- Production URL: https://code-sample-three.vercel.app

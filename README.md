@@ -74,5 +74,5 @@ npm run build
 
 This project is intended to deploy through a public GitHub repository connected to Vercel with default Next.js settings.
 
-Production URL: TBD
-GitHub repo: TBD
+Production URL: https://code-sample-three.vercel.app
+GitHub repo: https://github.com/mundizzle/code-sample
