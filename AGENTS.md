@@ -17,6 +17,32 @@ This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conv
 
 Update this checklist as phases are completed so future sessions can reorient quickly after context resets.
 
+## Current Session Handoff
+
+Last confirmed state:
+
+- GitHub repo is public and pushed: https://github.com/mundizzle/code-sample
+- Vercel production deployment is live: https://code-sample-three.vercel.app
+- Vercel is connected to the GitHub repo; pushes to `main` trigger production deployments.
+- The app intentionally still shows the default Next.js scaffold page.
+- `PLAN.md` has been removed; `AGENTS.md` is the active operating guide.
+- `CLAUDE.md` is only a compatibility pointer to `AGENTS.md`.
+- `docs/design-to-dev-workflow.md` explains the Figma Variables to Tailwind token flow.
+
+Next commit cycle:
+
+- Phase 1A: add the unit-test harness and domain model.
+- Use Vitest for Phase 1 pure utility TDD. This is not installed by default in `create-next-app`, but it is an officially documented Next.js testing path and is a small, justified addition for plain TypeScript utility tests.
+- Add `npm run test` and `npm run test:watch` when Vitest lands.
+- Create `src/features/dashboard/types.ts` before building UI.
+- Prefer the first real test over a throwaway smoke test if the domain shape is clear.
+
+Phase 1B:
+
+- TDD the pure utilities one behavior at a time: write a failing test, implement the smallest useful function, then refactor if needed.
+- Start with `filterProjects`, then `sortProjects`, `calculateProjectHealth`, `aggregateDashboardMetrics`, `buildRiskSummary`, and `buildHealthTrendSeries`.
+- Do not start the dashboard UI until the typed fixtures and utility tests are in place.
+
 ## Stack Guardrails
 
 - Next.js App Router with `src/app`.
@@ -54,11 +80,16 @@ npm run lint
 npm run build
 ```
 
-Future scripts to add when those phases land:
+Add these during Phase 1A:
 
 ```bash
 npm run test
 npm run test:watch
+```
+
+Future script to add when Storybook lands:
+
+```bash
 npm run build-storybook
 ```
 
@@ -66,6 +97,8 @@ npm run build-storybook
 
 ### Phase 1: Data + Utilities
 
+- Phase 1A: install/configure Vitest, add test scripts, define dashboard domain types.
+- Phase 1B: add fixtures and TDD pure utilities before UI.
 - Define typed fixtures for clients, projects, milestones, risks, weekly metrics, and team allocation.
 - Add pure utilities first: filtering, sorting, health calculation, metric aggregation, risk summary, and chart-series builders.
 - Prioritize unit tests for pure utilities.
