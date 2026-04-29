@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Agency Delivery Dashboard",
-  description: "Responsive Next.js code sample with Figma-aligned design tokens.",
+  description: "Track client delivery health, launch readiness, and open risks.",
 };
 
 export default function RootLayout({

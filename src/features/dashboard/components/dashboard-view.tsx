@@ -66,10 +66,10 @@ export function DashboardView() {
 
   return (
     <main className="min-h-screen bg-ad-bg text-ad-text">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto box-border flex w-full max-w-[1440px] flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
         <DashboardHeader />
 
-        <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[220px_minmax(0,1fr)_316px]">
+        <div className="grid min-w-0 gap-6 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[220px_minmax(0,1fr)_316px]">
           <FilterPanel
             clients={data.clients}
             selectedClientIds={filters.clientIds}
@@ -113,7 +113,7 @@ export function DashboardView() {
             >
               <ChartPanel
                 title="Health Trend"
-                description="ECharts-ready data visualization using chart token colors."
+                description="Average project health over the last four reporting weeks."
               >
                 <EChart
                   ariaLabel="Weekly delivery health scores"
@@ -123,10 +123,11 @@ export function DashboardView() {
 
               <ChartPanel
                 title="Risk Distribution"
-                description="ECharts-ready data visualization using chart token colors."
+                description="Open risks grouped by severity across active projects."
               >
                 <EChart
                   ariaLabel="Open risk distribution by severity"
+                  className="h-72 w-full sm:h-56"
                   option={riskDistributionOption}
                 />
               </ChartPanel>
@@ -155,7 +156,7 @@ function DashboardHeader() {
         Delivery Command Center
       </h1>
       <p className="mt-3 max-w-2xl text-base leading-6 text-ad-text-muted">
-        A responsive dashboard reference for tracking client delivery health, risks, and launch readiness.
+        Track client delivery health, launch readiness, and open risks across active accounts.
       </p>
     </header>
   );
@@ -170,7 +171,7 @@ type MetricCardProps = {
 
 function MetricCard({ label, value, delta }: MetricCardProps) {
   return (
-    <article className="min-h-28 rounded-ad-md border border-ad-border bg-ad-surface p-5">
+    <article className="min-h-28 w-full min-w-0 rounded-ad-md border border-ad-border bg-ad-surface p-5">
       <div className="flex items-start justify-between gap-4">
         <p className="text-3xl font-semibold text-ad-text">{value}</p>
         <p className="text-sm font-semibold text-ad-success">{delta}</p>
@@ -194,7 +195,7 @@ function FilterPanel({
   return (
     <aside
       aria-label="Dashboard filters"
-      className="rounded-ad-md border border-ad-border bg-ad-surface p-5 lg:min-h-[710px] xl:sticky xl:top-8 xl:self-start"
+      className="w-full min-w-0 rounded-ad-md border border-ad-border bg-ad-surface p-5 lg:min-h-[710px] xl:sticky xl:top-8 xl:self-start"
     >
       <fieldset>
         <legend className="text-base font-semibold text-ad-text">Clients</legend>
@@ -224,7 +225,7 @@ function FilterPanel({
       </fieldset>
 
       <p className="mt-8 max-w-40 text-sm leading-5 text-ad-text-muted">
-        Filters and UI state will be owned by Zustand in the app.
+        Focus the portfolio by client to review delivery health and launch readiness.
       </p>
     </aside>
   );
@@ -242,7 +243,7 @@ function ChartPanel({ title, description, children }: ChartPanelProps) {
   return (
     <section
       aria-labelledby={headingId}
-      className="rounded-ad-md border border-ad-border bg-ad-surface p-5"
+      className="min-w-0 rounded-ad-md border border-ad-border bg-ad-surface p-5"
     >
       <h2 id={headingId} className="text-lg font-semibold text-ad-text">
         {title}
@@ -252,25 +253,6 @@ function ChartPanel({ title, description, children }: ChartPanelProps) {
     </section>
   );
 }
-
-function OldRemovedBlock() {
-  return null;
-}
-/* removed below */
-/*
-      <div className="max-w-3xl">
-        <p className="text-sm font-medium text-ad-accent">Agency Delivery Dashboard</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-normal text-ad-text md:text-4xl">
-          Delivery Command Center
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-ad-text-muted md:text-base">
-          A responsive dashboard reference for tracking client delivery health, risks, and launch readiness.
-        </p>
-      </div>
-      <div className="rounded-ad-md border border-ad-border bg-ad-surface px-4 py-3 text-sm text-ad-text-muted">
-        May 2026 portfolio
-      </div>
-*/
 
 type ProjectListProps = {
   clients: Client[];
@@ -352,7 +334,7 @@ function ProjectDetailPanel({ project }: { project?: Project }) {
   return (
     <section
       aria-label="Selected Project"
-      className="@container/project-detail rounded-ad-md border border-ad-border bg-ad-surface p-4 lg:sticky lg:top-6 lg:self-start"
+      className="@container/project-detail rounded-ad-md border border-ad-border bg-ad-surface p-4 lg:col-start-2 lg:row-start-2 lg:self-start xl:col-start-auto xl:row-start-auto xl:sticky xl:top-6"
     >
       <p className="text-sm font-medium text-ad-accent">Selected Project</p>
       <h2 className="mt-2 text-xl font-semibold text-ad-text">{project.name}</h2>

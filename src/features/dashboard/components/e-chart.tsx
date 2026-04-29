@@ -27,10 +27,11 @@ registerEChartsModules([
 
 type EChartProps = {
   ariaLabel: string;
+  className?: string;
   option: EChartsOption;
 };
 
-export function EChart({ ariaLabel, option }: EChartProps) {
+export function EChart({ ariaLabel, className = "h-56 w-full", option }: EChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ECharts | null>(null);
 
@@ -63,7 +64,7 @@ export function EChart({ ariaLabel, option }: EChartProps) {
       ref={containerRef}
       role="img"
       aria-label={ariaLabel}
-      className="h-56 w-full"
+      className={className}
     />
   );
 }

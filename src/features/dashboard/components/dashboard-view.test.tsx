@@ -18,35 +18,45 @@ function renderDashboard() {
 }
 
 describe("DashboardView", () => {
-  it("renders the Figma-aligned dashboard content", async () => {
+  it("renders the product dashboard content", async () => {
     renderDashboard();
 
     expect(
       await screen.findByRole("heading", { name: "Delivery Command Center" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Track client delivery health, launch readiness, and open risks across active accounts.",
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByRole("main")).toBeInTheDocument();
     expect(screen.getByRole("complementary", { name: "Dashboard filters" })).toBeInTheDocument();
-    expect(screen.getByText("Active Projects")).toBeInTheDocument();
+    expect(await screen.findByText("Active Projects")).toBeInTheDocument();
     expect(screen.getByText("Delivery Health")).toBeInTheDocument();
     expect(screen.getByText("Open Risks")).toBeInTheDocument();
-    expect(screen.getByText("Launches This Month")).toBeInTheDocument();
+    expect(screen.getByText("Launches")).toBeInTheDocument();
     expect(screen.getByText("Health Trend")).toBeInTheDocument();
     expect(screen.getByText("Risk Distribution")).toBeInTheDocument();
-    expect(screen.getByText("Budget vs Timeline")).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: "Weekly delivery health scores" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: "Open risk distribution by severity" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("img", {
-        name: "Project budget used compared with timeline used",
-      }),
-    ).toBeInTheDocument();
+    expect(screen.queryByText("Budget vs Timeline")).not.toBeInTheDocument();
     expect(await screen.findAllByText("Resident Services Hub")).toHaveLength(2);
     expect(screen.getByText("Selected Project")).toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Project list" })).toBeInTheDocument();
+  });
+
+  it("keeps implementation commentary out of the product UI", async () => {
+    renderDashboard();
+
+    await screen.findAllByText("Resident Services Hub");
+    expect(screen.queryByText(/ECharts-ready/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Zustand/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/design token/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/code sample/i)).not.toBeInTheDocument();
   });
 
   it("filters projects by client chip", async () => {
@@ -54,7 +64,7 @@ describe("DashboardView", () => {
     renderDashboard();
 
     await screen.findAllByText("Resident Services Hub");
-    await user.click(screen.getByRole("button", { name: "CivicWorks", pressed: false }));
+    await user.click(screen.getByRole("button", { name: "CivicWorks", pressed: true }));
 
     const projectList = screen.getByRole("region", { name: "Projects" });
     expect(within(projectList).getByText("Resident Services Hub")).toBeInTheDocument();
@@ -62,28 +72,16 @@ describe("DashboardView", () => {
     expect(within(projectList).queryByText("Care Pathways")).not.toBeInTheDocument();
   });
 
-  it("filters projects by search", async () => {
-    const user = userEvent.setup();
-    renderDashboard();
-
-    await screen.findAllByText("Resident Services Hub");
-    await user.type(screen.getByRole("searchbox", { name: /Search projects/i }), "loyalty");
-
-    const projectList = screen.getByRole("region", { name: "Projects" });
-    expect(within(projectList).getByText("Loyalty Insights")).toBeInTheDocument();
-    expect(within(projectList).queryByText("Resident Services Hub")).not.toBeInTheDocument();
-  });
-
   it("updates selected project details from the project list", async () => {
     const user = userEvent.setup();
     renderDashboard();
 
     await screen.findAllByText("Resident Services Hub");
-    await user.click(screen.getByRole("button", { name: /Care Pathways/i }));
+    await user.click(screen.getByRole("button", { name: /Marketplace Refresh/i }));
 
     const detail = screen.getByRole("region", { name: "Selected Project" });
-    expect(within(detail).getByText("Care Pathways")).toBeInTheDocument();
-    expect(within(detail).getByText("Owner: Jordan Lee")).toBeInTheDocument();
+    expect(within(detail).getByText("Marketplace Refresh")).toBeInTheDocument();
+    expect(within(detail).getByText("Owner: Priya Shah")).toBeInTheDocument();
   });
 
   it("marks the project detail panel as the container-query example", async () => {

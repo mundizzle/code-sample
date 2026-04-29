@@ -13,7 +13,7 @@ This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conv
 - [x] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary
 - [x] Phase 3: Responsive dashboard layout and components
 - [x] Phase 4: ECharts integration
-- [ ] Phase 4B: Figma parity correction, component by component (current)
+- [ ] Phase 4B: Figma/app convergence, component by component (current)
 - [ ] Phase 5: Tests, Storybook, README polish, and final deploy
 
 Update this checklist as phases are completed so future sessions can reorient quickly after context resets.
@@ -29,8 +29,10 @@ Last confirmed state:
 - `PLAN.md` has been removed; `AGENTS.md` is the active operating guide.
 - `CLAUDE.md` is only a compatibility pointer to `AGENTS.md`.
 - `docs/design-to-dev-workflow.md` explains the Figma Variables to Tailwind token flow.
-- Current Figma reference must be treated as the source of truth before additional UI work. A read-only Figma REST check on 2026-04-29 returned the live `Dashboard Reference` frame geometry listed below.
-- Important: `src/features/dashboard/components/dashboard-view.tsx` currently has partial, unverified layout edits from an interrupted Figma-parity correction. Do not assume the current browser UI is approved. Before continuing, clean up or complete those partial edits according to the Phase 4B plan below.
+- Current app implementation is allowed to inform the Figma reference. For this interview code sample, the goal is a coherent design-to-dev story, not preserving the first Figma mockup at all costs.
+- Phase 4B should converge Figma and the app around the path of least resistance: use the browser implementation as the practical visual baseline when it is more realistic than the original Figma placeholder, then update Figma to match with token-driven layers.
+- Product-facing UI copy has been cleaned up. Do not add visible copy that explains the implementation, tooling, design tokens, Figma, ECharts, Zustand, or that this is a code sample.
+- The latest attempt to write app-converged Figma frames through the Codex Figma connector failed with `UNAVAILABLE / Connection failed`. Figma REST/PAT read and image-render workflows have worked; use those for inspection, and retry the connector or a temporary plugin only when canvas editing is required.
 
 Completed Phase 1:
 
@@ -39,17 +41,18 @@ Completed Phase 1:
 - Phase 1B is complete: `src/features/dashboard/data/fixtures.ts` contains Figma-aligned dashboard fixtures, and `src/features/dashboard/utils/dashboard-utils.ts` contains tested pure utilities for filtering, sorting, health scoring, KPI aggregation, risk summary, and health-trend series.
 - Phase 2 is complete: TanStack Query and Zustand are installed, `src/app/providers.tsx` wires client providers below the root layout, `src/features/dashboard/data/dashboard-query.ts` owns fixture-backed dashboard query options, and `src/features/dashboard/state/dashboard-store.ts` owns UI-only dashboard state through a per-instance Zustand vanilla store.
 - Phase 3 is complete: `src/app/page.tsx` renders `DashboardView`, with responsive KPI cards, semantic filter controls, chart placeholders, a project list, selected-project detail, and a `ProjectDetailPanel` container query example. Component tests use React Testing Library, jsdom, and user-event.
-- Phase 4 is complete: ECharts is installed, `src/features/dashboard/charts/chart-options.ts` contains tested pure option builders, `src/features/dashboard/components/e-chart.tsx` owns browser-only chart lifecycle, and the dashboard renders health trend, risk distribution, and budget-vs-timeline charts with accessible chart labels.
+- Phase 4 is complete: ECharts is installed, `src/features/dashboard/charts/chart-options.ts` contains tested pure option builders, `src/features/dashboard/components/e-chart.tsx` owns browser-only chart lifecycle, and the dashboard currently renders health trend and risk distribution charts with accessible chart labels. The budget-vs-timeline option builder remains tested but is not visible in the current product UI.
 
 Next commit cycle:
 
-- Phase 4B: correct the implemented dashboard to match the Figma reference component by component.
+- Phase 4B: converge the Figma reference and implemented dashboard component by component.
 - Continue TDD: add or adjust focused component tests before each component correction.
 - Pause after each component step for user visual review before moving to the next component.
+- Immediate next step after compaction: begin Phase 4B Step 1 by updating Figma to match the current whole-app browser composition, then capture Figma and browser screenshots for visual comparison.
 
-## Figma Source Of Truth
+## Figma / App Visual Contract
 
-Use Figma REST inspection before changing UI. Do not implement from memory or from old screenshots when Figma can be inspected.
+Use Figma REST inspection before changing UI, but do not treat the old Figma layout as immutable. This project is a demonstration artifact. If the running app uses a more realistic or lower-effort implementation pattern, update Figma to match the app rather than over-customizing code to preserve a placeholder mockup.
 
 Read-only Figma inspection command:
 
@@ -61,7 +64,7 @@ curl -sS -H "X-Figma-Token: $TOKEN" \
 
 Do not print the token. If network is blocked, request escalation for the read-only Figma API call.
 
-Desktop frame values from the 2026-04-29 Figma REST check:
+Earlier desktop frame values from the 2026-04-29 Figma REST check:
 
 - Frame: `Desktop / 1440`, `1440 x 1020`.
 - Page padding: `28px`.
@@ -96,26 +99,35 @@ Mobile frame values:
 - Risk chart: `334 x 230`.
 - Project card: `334 x 146`.
 
-## Phase 4B Figma-Parity Workflow
+## Phase 4B Figma/App Convergence Workflow
 
-Work component by component. After each step, stop and ask the user to review the browser against Figma before continuing.
+Work component by component. After each step, stop and ask the user to review the browser and Figma reference together before continuing.
 
-1. **Stabilize The Baseline**
-   - Inspect `git diff` and clean up the interrupted partial edit in `dashboard-view.tsx`.
-   - Keep the ECharts dependency and pure chart option tests, but remove visible UI that does not exist in Figma.
+Visual audit requirement for each step:
+
+- Render the relevant Figma frame or component via the Figma Images API when available.
+- Capture the running app in the in-app browser at the matching viewport size.
+- Compare the screenshots before moving on, using the current app as the practical implementation baseline when it is more realistic or lower effort.
+- Record clear differences in prose and decide explicitly whether Figma should move toward the app or the app should move toward Figma.
+- Keep temporary visual-audit artifacts out of git unless the user explicitly asks to preserve them.
+
+1. **Converge The Baseline**
+   - Inspect `git diff` and remove leftover debug or interrupted code.
+   - Keep the ECharts dependency and pure chart option tests.
+   - Update Figma responsive frames to reflect the current whole-app browser composition with token-bound layers where possible.
    - Run the targeted component tests before continuing.
+   - Capture a desktop app screenshot and compare it against the updated Figma desktop frame.
    - Pause for review.
 
 2. **Header**
-   - Match Figma header spacing and copy width.
-   - Remove any extra header controls not present in Figma.
+   - Keep the app header and Figma header aligned.
    - Verify desktop, tablet, and mobile header positions visually.
    - Pause for review.
 
 3. **Client Rail / Filter Area**
-   - Desktop: implement the left `Client Filter Rail` as `220 x 710`.
-   - Tablet/mobile: use Figma filter-chip layout rather than desktop rail.
-   - Do not add a visible search field unless Figma is updated to include it.
+   - Desktop: keep the left client rail aligned between app and Figma.
+   - Tablet/mobile: preserve mobile-first responsive behavior and update Figma to show the agreed layout.
+   - Do not add a visible search field unless it is intentionally restored in both app and Figma.
    - Preserve accessible button semantics and selected state.
    - Pause for review.
 
@@ -128,9 +140,8 @@ Work component by component. After each step, stop and ask the user to review th
    - Pause for review.
 
 5. **Chart Panels**
-   - Render only the two Figma chart panels: `Health Trend` and `Risk Distribution`.
-   - Keep ECharts inside those panels, but size the containers to match the Figma cards.
-   - Remove visible `Budget vs Timeline` from the page unless Figma is updated to include it.
+   - Prefer ECharts default idioms over custom chart mimicry.
+   - Update Figma chart panels to approximate the real ECharts output instead of forcing ECharts to match placeholder Figma art.
    - Ensure chart labels remain accessible via `role="img"` and `aria-label`.
    - Pause for review.
 
@@ -155,11 +166,12 @@ Work component by component. After each step, stop and ask the user to review th
 
 - Do not take a whole-page implementation pass when visual parity is the goal.
 - Do not add product features just because the data/model supports them.
-- Do not let a library integration change the visible Figma composition.
-- Do not call a phase complete until browser output has been compared to the current Figma frame.
-- If Figma and app disagree, stop and report the difference before continuing.
+- Do not let the Figma mockup force expensive custom code when a library-native implementation is good enough for the code sample.
+- Do not rely on code inspection alone for visual parity. Use browser screenshots and Figma render screenshots as the check.
+- Do not call a phase complete until browser output has been compared to the current Figma frame after deciding which side should move.
+- If Figma and app disagree, stop and report the difference before continuing, then choose the path of least resistance.
 - If Figma REST is unavailable, say so and ask whether to use the latest screenshot as a temporary source.
-- When the user says the design should match Figma, prioritize Figma parity over speculative production polish.
+- Prioritize a concise, explainable code sample over speculative production polish.
 
 ## Stack Guardrails
 
