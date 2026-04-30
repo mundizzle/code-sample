@@ -3,6 +3,7 @@ import { spawn } from "node:child_process";
 
 const tempDir = ".tmp-storybook-public";
 const publicDir = "public/storybook";
+const defaultStoryPath = "/story/dashboard-dashboard-view--dashboard";
 
 await rm(tempDir, { force: true, recursive: true });
 await rm(publicDir, { force: true, recursive: true });
@@ -36,6 +37,21 @@ async function fixManagerAssetPaths() {
   const indexPath = `${publicDir}/index.html`;
   const html = await readFile(indexPath, "utf8");
   const fixedHtml = html
+    .replace(
+      "<head>",
+      `<head>
+    <script>
+      (() => {
+        const url = new URL(window.location.href);
+        const currentPath = url.searchParams.get("path");
+
+        if (!currentPath || currentPath === "/") {
+          url.searchParams.set("path", "${defaultStoryPath}");
+          window.history.replaceState(null, "", url);
+        }
+      })();
+    </script>`,
+    )
     .replaceAll("url('./sb-", "url('/storybook/sb-")
     .replaceAll('href="./sb-', 'href="/storybook/sb-')
     .replaceAll("import './sb-", "import '/storybook/sb-");
