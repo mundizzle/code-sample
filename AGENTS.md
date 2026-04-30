@@ -45,10 +45,10 @@ Completed Phase 1:
 
 Next commit cycle:
 
-- Phase 4B: converge the Figma reference and implemented dashboard component by component.
-- Continue TDD: add or adjust focused component tests before each component correction.
-- Pause after each component step for user visual review before moving to the next component.
-- Immediate next step after compaction: begin Phase 4B Step 1 by updating Figma to match the current whole-app browser composition, then capture Figma and browser screenshots for visual comparison.
+- Phase 4B: converge the Figma reference and implemented dashboard around the running app.
+- Continue TDD for app code changes, but prefer screenshot-based Figma updates for the design reference when no product behavior is changing.
+- Immediate next step after compaction: create a Figma page named `App Viewports` that contains only three frames, left to right: `Mobile / 390`, `Tablet / 768`, and `Desktop / 1440`.
+- Use current browser screenshots as the Figma source for those three frames. Do not recreate token boards, component inventory, implementation notes, or design-system meta panels in this Figma pass.
 
 ## Figma / App Visual Contract
 
@@ -101,66 +101,36 @@ Mobile frame values:
 
 ## Phase 4B Figma/App Convergence Workflow
 
-Work component by component. After each step, stop and ask the user to review the browser and Figma reference together before continuing.
+The Figma deliverable for this phase is intentionally simple: one page named `App Viewports` with the app represented at three viewport widths. This is a hiring-code-sample reference, not a full design-system file.
 
-Visual audit requirement for each step:
+Figma target:
 
-- Render the relevant Figma frame or component via the Figma Images API when available.
-- Capture the running app in the in-app browser at the matching viewport size.
-- Compare the screenshots before moving on, using the current app as the practical implementation baseline when it is more realistic or lower effort.
-- Record clear differences in prose and decide explicitly whether Figma should move toward the app or the app should move toward Figma.
-- Keep temporary visual-audit artifacts out of git unless the user explicitly asks to preserve them.
+- `Mobile / 390` on the left.
+- `Tablet / 768` to the right of mobile.
+- `Desktop / 1440` to the right of tablet.
+- Each frame should show the current app as rendered in the browser at that viewport width.
+- Keep labels/frame names minimal. Do not include token boards, component inventories, implementation notes, or meta explanations.
 
-1. **Converge The Baseline**
-   - Inspect `git diff` and remove leftover debug or interrupted code.
-   - Keep the ECharts dependency and pure chart option tests.
-   - Update Figma responsive frames to reflect the current whole-app browser composition with token-bound layers where possible.
-   - Run the targeted component tests before continuing.
-   - Capture a desktop app screenshot and compare it against the updated Figma desktop frame.
-   - Pause for review.
+Workflow:
 
-2. **Header**
-   - Keep the app header and Figma header aligned.
-   - Verify desktop, tablet, and mobile header positions visually.
-   - Pause for review.
+1. Capture current app screenshots at exact viewport widths: `390`, `768`, and `1440`.
+2. Prefer screenshots of the running app over hand-drawn Figma reconstruction so Figma and implementation cannot drift.
+3. Use a temporary Figma plugin/import route only for canvas editing, then delete the temporary plugin files after the import succeeds.
+4. Render or visually inspect the resulting Figma page and compare it against the browser screenshots.
+5. Pause for user review before marking Phase 4B complete.
 
-3. **Client Rail / Filter Area**
-   - Desktop: keep the left client rail aligned between app and Figma.
-   - Tablet/mobile: preserve mobile-first responsive behavior and update Figma to show the agreed layout.
-   - Do not add a visible search field unless it is intentionally restored in both app and Figma.
-   - Preserve accessible button semantics and selected state.
-   - Pause for review.
+If app code changes during this phase:
 
-4. **KPI Cards**
-   - Match four KPI cards to Figma geometry and content.
-   - Desktop card size target: `250 x 116`.
-   - Tablet card size target: `164 x 116`.
-   - Mobile card size target: `334 x 116`.
-   - Use semantic `ad-*` Tailwind tokens for color, border, radius, and available spacing.
-   - Pause for review.
+- Continue TDD for behavior changes.
+- Keep mobile-first responsive, semantic HTML, accessible interactions, and semantic `ad-*` Tailwind token usage.
+- Re-capture affected viewport screenshots before updating Figma.
 
-5. **Chart Panels**
-   - Prefer ECharts default idioms over custom chart mimicry.
-   - Update Figma chart panels to approximate the real ECharts output instead of forcing ECharts to match placeholder Figma art.
-   - Ensure chart labels remain accessible via `role="img"` and `aria-label`.
-   - Pause for review.
+Final Phase 4B verification:
 
-6. **Project Rows / Cards**
-   - Desktop: match the three `Project Table Row` frames, each `794 x 64`.
-   - Tablet/mobile: match Figma project-card layout where applicable.
-   - Keep rows as semantic buttons or list items with keyboard access.
-   - Pause for review.
-
-7. **Selected Project Detail Panel**
-   - Match `Project Detail Panel / Resident Services Hub` dimensions and simplified content.
-   - Preserve the container-query example only where it does not visibly conflict with the Figma reference.
-   - Pause for review.
-
-8. **Final Phase 4B Verification**
-   - Run `npm run test`, `npm run lint`, and `npm run build`.
-   - Use the in-app browser to compare the app at `http://localhost:3000/` against the Figma desktop frame.
-   - Check that no extra panels, charts, search controls, or default scaffold artifacts appear.
-   - Only then mark Phase 4B complete and proceed to Storybook/README work.
+- Run `npm run test`, `npm run lint`, and `npm run build`.
+- Check that no temporary Figma/plugin files remain in the repo.
+- Confirm Figma shows only the three agreed app viewport frames.
+- Only then mark Phase 4B complete and proceed to Storybook/README work.
 
 ## Drift Prevention Rules
 

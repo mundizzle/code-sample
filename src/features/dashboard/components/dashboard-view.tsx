@@ -199,7 +199,7 @@ function FilterPanel({
     >
       <fieldset>
         <legend className="text-base font-semibold text-ad-text">Clients</legend>
-        <div className="mt-5 flex flex-wrap gap-3 lg:flex-col">
+        <div className="mt-5 flex flex-col gap-3">
           {clients.map((client, index) => {
             const isSelected =
               selectedClientIds.includes(client.id) ||
@@ -211,7 +211,7 @@ function FilterPanel({
                 type="button"
                 aria-pressed={isSelected}
                 onClick={() => onToggleClient(client.id)}
-                className={`min-h-8 rounded-ad-sm border px-4 py-2 text-left text-sm font-medium transition lg:w-full ${
+                className={`min-h-11 w-full rounded-ad-sm border px-4 py-2 text-left text-sm font-medium transition ${
                   isSelected
                     ? "border-ad-accent bg-ad-accent text-white"
                     : "border-ad-border bg-ad-surface text-ad-text-muted hover:border-ad-accent hover:text-ad-text"
@@ -224,7 +224,7 @@ function FilterPanel({
         </div>
       </fieldset>
 
-      <p className="mt-8 max-w-40 text-sm leading-5 text-ad-text-muted">
+      <p className="mt-8 w-full text-sm leading-5 text-ad-text-muted">
         Focus the portfolio by client to review delivery health and launch readiness.
       </p>
     </aside>

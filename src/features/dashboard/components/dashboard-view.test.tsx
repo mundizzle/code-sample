@@ -72,6 +72,23 @@ describe("DashboardView", () => {
     expect(within(projectList).queryByText("Care Pathways")).not.toBeInTheDocument();
   });
 
+  it("keeps client controls stacked and full-width for narrow layouts", async () => {
+    renderDashboard();
+
+    const civicWorksButton = await screen.findByRole("button", { name: "CivicWorks" });
+    const chipStack = civicWorksButton.parentElement;
+
+    expect(chipStack).toHaveClass("flex-col");
+    expect(chipStack).not.toHaveClass("flex-wrap");
+    expect(civicWorksButton).toHaveClass("w-full");
+
+    const supportingCopy = screen.getByText(
+      "Focus the portfolio by client to review delivery health and launch readiness.",
+    );
+    expect(supportingCopy).toHaveClass("w-full");
+    expect(supportingCopy).not.toHaveClass("max-w-40");
+  });
+
   it("updates selected project details from the project list", async () => {
     const user = userEvent.setup();
     renderDashboard();
