@@ -83,7 +83,7 @@ export function DashboardView() {
             >
               <MetricCard
                 label="Active Projects"
-                value={metrics.openRisks.toString()}
+                value={metrics.activeProjects.toString()}
                 delta="+2"
                 tone="text"
               />
@@ -95,7 +95,7 @@ export function DashboardView() {
               />
               <MetricCard
                 label="Open Risks"
-                value={metrics.activeProjects.toString()}
+                value={metrics.openRisks.toString()}
                 delta="-2"
                 tone="text"
               />

@@ -13,8 +13,8 @@ This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conv
 - [x] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary
 - [x] Phase 3: Responsive dashboard layout and components
 - [x] Phase 4: ECharts integration
-- [ ] Phase 4B: Figma/app convergence, component by component (current)
-- [ ] Phase 5: Tests, Storybook, README polish, and final deploy
+- [x] Phase 4B: Figma/app convergence, component by component
+- [x] Phase 5: Tests, Storybook, README polish, and final deploy
 
 Update this checklist as phases are completed so future sessions can reorient quickly after context resets.
 
@@ -30,7 +30,7 @@ Last confirmed state:
 - `CLAUDE.md` is only a compatibility pointer to `AGENTS.md`.
 - `docs/design-to-dev-workflow.md` explains the Figma Variables to Tailwind token flow.
 - Current app implementation is allowed to inform the Figma reference. For this interview code sample, the goal is a coherent design-to-dev story, not preserving the first Figma mockup at all costs.
-- Phase 4B should converge Figma and the app around the path of least resistance: use the browser implementation as the practical visual baseline when it is more realistic than the original Figma placeholder, then update Figma to match with token-driven layers.
+- Phase 4B converged Figma and the app around the browser implementation as the practical visual baseline, using editable Figma layers with token-bound paints where the plugin/API allowed it.
 - Product-facing UI copy has been cleaned up. Do not add visible copy that explains the implementation, tooling, design tokens, Figma, ECharts, Zustand, or that this is a code sample.
 - The latest attempt to write app-converged Figma frames through the Codex Figma connector failed with `UNAVAILABLE / Connection failed`. Figma REST/PAT read and image-render workflows have worked; use those for inspection, and retry the connector or a temporary plugin only when canvas editing is required.
 
@@ -45,10 +45,9 @@ Completed Phase 1:
 
 Next commit cycle:
 
-- Phase 4B: converge the Figma reference and implemented dashboard around the running app.
-- Continue TDD for app code changes, but prefer screenshot-based Figma updates for the design reference when no product behavior is changing.
-- Immediate next step after compaction: create a Figma page named `App Viewports` that contains only three frames, left to right: `Mobile / 390`, `Tablet / 768`, and `Desktop / 1440`.
-- Use current browser screenshots as the Figma source for those three frames. Do not recreate token boards, component inventory, implementation notes, or design-system meta panels in this Figma pass.
+- The main code-sample build phases are complete.
+- If more time is available, focus only on small defects, copy refinements, or interview-specific README polish.
+- If the metric labels or other visible app facts change later, update the Figma `App Viewports` page before handoff so the design reference and browser remain aligned.
 
 ## Figma / App Visual Contract
 
@@ -114,7 +113,7 @@ Figma target:
 Workflow:
 
 1. Capture current app screenshots at exact viewport widths: `390`, `768`, and `1440`.
-2. Prefer screenshots of the running app over hand-drawn Figma reconstruction so Figma and implementation cannot drift.
+2. Use those screenshots as visual reference only; Figma should contain editable layers, not flat screenshot imports.
 3. Use a temporary Figma plugin/import route only for canvas editing, then delete the temporary plugin files after the import succeeds.
 4. Render or visually inspect the resulting Figma page and compare it against the browser screenshots.
 5. Pause for user review before marking Phase 4B complete.
@@ -203,9 +202,10 @@ npm run test
 npm run test:watch
 ```
 
-Future script to add when Storybook lands:
+Available after Phase 5 setup:
 
 ```bash
+npm run storybook
 npm run build-storybook
 ```
 
@@ -243,7 +243,7 @@ npm run build-storybook
 
 ### Phase 5: Documentation + Release
 
-- Add Storybook stories for core components with light/dark appearance decorators.
+- Add Storybook stories for the dashboard surface; OS-driven light/dark remains controlled by `prefers-color-scheme`, not app theme state.
 - Add focused tests for utilities, Zustand actions, chart options, filters, selected project behavior, empty states, and OS-driven dark-mode styling.
 - Polish README with stack choices, token workflow, responsive notes, test commands, Storybook commands, Vercel deploy notes, and next steps.
 - Deploy through GitHub + Vercel and record the production URL only after it exists.

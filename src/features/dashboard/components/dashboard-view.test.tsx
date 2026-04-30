@@ -32,8 +32,10 @@ describe("DashboardView", () => {
     expect(screen.getByRole("main")).toBeInTheDocument();
     expect(screen.getByRole("complementary", { name: "Dashboard filters" })).toBeInTheDocument();
     expect(await screen.findByText("Active Projects")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
     expect(screen.getByText("Delivery Health")).toBeInTheDocument();
     expect(screen.getByText("Open Risks")).toBeInTheDocument();
+    expect(screen.getByText("8")).toBeInTheDocument();
     expect(screen.getByText("Launches")).toBeInTheDocument();
     expect(screen.getByText("Health Trend")).toBeInTheDocument();
     expect(screen.getByText("Risk Distribution")).toBeInTheDocument();

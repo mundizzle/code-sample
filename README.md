@@ -1,6 +1,6 @@
 # Agency Delivery Dashboard Code Sample
 
-A focused Next.js code sample for a senior front-end role. The current foundation keeps the default scaffold page in place while setting up the design-token workflow, build scripts, and project guidance for the dashboard implementation.
+A focused Next.js code sample for a senior front-end role. The app presents a responsive agency delivery dashboard with fixture-backed data, client-side UI state, ECharts visualizations, semantic Tailwind tokens, and a Figma-to-code token workflow.
 
 Figma reference: https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3
 
@@ -10,6 +10,11 @@ Figma reference: https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample
 - React and TypeScript
 - Tailwind CSS v4
 - Figma-exported design tokens
+- Zustand for UI-only dashboard state
+- TanStack Query for the dashboard data boundary
+- ECharts for browser-rendered charts
+- Vitest and React Testing Library
+- Storybook for component documentation
 - OS-driven light and dark appearance
 
 ## Token Flow
@@ -56,11 +61,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Current Shape
 
-This foundation intentionally keeps the default Next.js starter page. The dashboard layout will be implemented in the next commit cycle.
-
 - `src/app/globals.css` imports Tailwind and the generated theme bridge.
 - `src/app/theme.css` is generated from the token files.
 - `scripts/generate-tailwind-theme.mjs` creates the Tailwind CSS bridge.
+- `src/features/dashboard/` contains the domain model, fixtures, utilities, store, query boundary, chart option builders, dashboard UI, tests, and Storybook story.
 - `AGENTS.md` is the active phase guide for future work.
 
 ## Validation
@@ -69,6 +73,13 @@ This foundation intentionally keeps the default Next.js starter page. The dashbo
 npm run test
 npm run lint
 npm run build
+npm run build-storybook
+```
+
+Run Storybook locally with:
+
+```bash
+npm run storybook
 ```
 
 ## Deploy
