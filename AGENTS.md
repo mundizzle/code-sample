@@ -1,185 +1,134 @@
 # Agency Delivery Dashboard Code Sample
 
-## Project Goal
+## Purpose
 
-Build a clean Senior FED code sample that demonstrates a realistic agency delivery dashboard using Next.js, React, Tailwind, Figma-exported design tokens, responsive layout, complex state boundaries, charts, Storybook, and focused tests.
+This repository is a Senior FED code sample for a realistic agency delivery dashboard. It is meant to demonstrate a complete design-to-dev workflow, not a production SaaS product:
 
-This repo should stay tidy and easy to explain. Prefer stock Next.js/Vercel conventions unless there is a clear reason to deviate.
+- Figma Variables exported into token JSON.
+- Generated Tailwind v4 theme variables.
+- A responsive Next.js App Router dashboard.
+- Clear React component boundaries.
+- Zustand for UI-only state.
+- TanStack Query for the dashboard data boundary.
+- ECharts with pure, tested option builders.
+- Storybook for component and token documentation.
+- Focused Vitest and React Testing Library coverage.
+- GitHub-backed Vercel deployment.
 
-## Current Phase
+Keep the repo concise, conventional, and easy to explain in an interview.
 
-- [x] Phase 0: Foundation + deploy preparation
-- [x] Phase 1: Data model, fixtures, and pure utilities
-- [x] Phase 2: Providers, Zustand UI state, and TanStack Query data boundary
-- [x] Phase 3: Responsive dashboard layout and components
-- [x] Phase 4: ECharts integration
-- [x] Phase 4B: Figma/app convergence, component by component
-- [x] Phase 5: Tests, Storybook, README polish, and final deploy
+## Live Surfaces
 
-Update this checklist as phases are completed so future sessions can reorient quickly after context resets.
+- GitHub: https://github.com/mundizzle/code-sample
+- App: https://code-sample-three.vercel.app
+- Storybook: https://code-sample-three.vercel.app/storybook
+- Figma reference: https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3
 
-## Current Session Handoff
+Pushes to `main` trigger Vercel production deployments.
 
-Last confirmed state:
+## Repo Map
 
-- GitHub repo is public and pushed: https://github.com/mundizzle/code-sample
-- Vercel production deployment is live: https://code-sample-three.vercel.app
-- Vercel is connected to the GitHub repo; pushes to `main` trigger production deployments.
-- The app now renders the first responsive dashboard UI on the home route.
-- `PLAN.md` has been removed; `AGENTS.md` is the active operating guide.
-- `CLAUDE.md` is only a compatibility pointer to `AGENTS.md`.
-- `docs/design-to-dev-workflow.md` explains the Figma Variables to Tailwind token flow.
-- Current app implementation is allowed to inform the Figma reference. For this interview code sample, the goal is a coherent design-to-dev story, not preserving the first Figma mockup at all costs.
-- Phase 4B converged Figma and the app around the browser implementation as the practical visual baseline, using editable Figma layers with token-bound paints where the plugin/API allowed it.
-- Product-facing UI copy has been cleaned up. Do not add visible copy that explains the implementation, tooling, design tokens, Figma, ECharts, Zustand, or that this is a code sample.
-- The latest attempt to write app-converged Figma frames through the Codex Figma connector failed with `UNAVAILABLE / Connection failed`. Figma REST/PAT read and image-render workflows have worked; use those for inspection, and retry the connector or a temporary plugin only when canvas editing is required.
+- `src/app/` - Next.js App Router shell, providers, global CSS, generated theme import.
+- `design-tokens/` - Figma-style token exports for light and dark appearance.
+- `scripts/generate-tailwind-theme.mjs` - Converts token JSON into `src/app/theme.css`.
+- `scripts/build-storybook-public.mjs` - Builds static Storybook into `public/storybook` for Vercel.
+- `src/features/dashboard/types.ts` - Dashboard domain model.
+- `src/features/dashboard/data/` - Fixture-backed data boundary and TanStack Query options.
+- `src/features/dashboard/state/` - Per-instance Zustand vanilla store and provider.
+- `src/features/dashboard/utils/` - Pure dashboard calculations and filtering utilities.
+- `src/features/dashboard/charts/` - ECharts palette hooks and pure option builders.
+- `src/features/dashboard/components/` - Self-contained React components and stories.
+- `src/features/dashboard/foundations/` - Storybook token documentation.
+- `README.md` - Public-facing project explanation and workflow narrative.
 
-Completed Phase 1:
+## Architecture Conventions
 
-- Phase 1A is complete: Vitest is installed, `npm run test` / `npm run test:watch` exist, and `src/features/dashboard/types.ts` defines the initial dashboard domain model.
-- The first test is a domain contract test for client/project/dashboard data shape.
-- Phase 1B is complete: `src/features/dashboard/data/fixtures.ts` contains Figma-aligned dashboard fixtures, and `src/features/dashboard/utils/dashboard-utils.ts` contains tested pure utilities for filtering, sorting, health scoring, KPI aggregation, risk summary, and health-trend series.
-- Phase 2 is complete: TanStack Query and Zustand are installed, `src/app/providers.tsx` wires client providers below the root layout, `src/features/dashboard/data/dashboard-query.ts` owns fixture-backed dashboard query options, and `src/features/dashboard/state/dashboard-store.ts` owns UI-only dashboard state through a per-instance Zustand vanilla store.
-- Phase 3 is complete: `src/app/page.tsx` renders `DashboardView`, with responsive KPI cards, semantic filter controls, chart placeholders, a project list, selected-project detail, and a `ProjectDetailPanel` container query example. Component tests use React Testing Library, jsdom, and user-event.
-- Phase 4 is complete: ECharts is installed, `src/features/dashboard/charts/chart-options.ts` contains tested pure option builders, `src/features/dashboard/components/e-chart.tsx` owns browser-only chart lifecycle, and the dashboard currently renders health trend and risk distribution charts with accessible chart labels. The budget-vs-timeline option builder remains tested but is not visible in the current product UI.
+- Keep Server Components as the default in `src/app`; push `"use client"` down to the smallest interactive boundary.
+- Keep `DashboardView` as the composition layer. It may query data, read/write dashboard UI state, build chart options, and compose sections, but presentational UI belongs in focused component files.
+- Prefer named exports from component modules.
+- Keep component prop types colocated with the component. Export prop types only when Storybook or another component needs them.
+- Avoid barrel files for this small feature; direct imports keep the code easy to trace.
+- Keep data fixtures deterministic. This repo is a demo, so no live API or persistence should be added without an explicit reason.
+- Keep TanStack Query responsible for server/data state and Zustand responsible for UI-only state.
+- Store actions should copy caller-owned arrays and objects before saving them.
+- Keep chart option builders pure and unit-tested. `EChart` owns browser-only chart lifecycle.
 
-Next commit cycle:
+## Design And Styling Conventions
 
-- The main code-sample build phases are complete.
-- If more time is available, focus only on small defects, copy refinements, or interview-specific README polish.
-- If the metric labels or other visible app facts change later, update the Figma `App Viewports` page before handoff so the design reference and browser remain aligned.
+- Figma Variables are the design source; token JSON files are the handoff artifact used by the app.
+- Run `npm run generate-tailwind-theme` after token changes.
+- Prefer semantic Tailwind utilities backed by `ad-*` theme tokens, such as `bg-ad-bg`, `bg-ad-surface`, `text-ad-text`, `border-ad-border`, `rounded-ad-md`, and chart token colors.
+- Use raw Tailwind values only for structural layout, responsive behavior, one-off grid tracks, or values not represented in the token set.
+- Appearance follows `prefers-color-scheme`; do not add an in-app theme switcher.
+- Brand or white-label theming is a future token axis, separate from light/dark appearance.
+- Keep product UI free of meta commentary. The app should not explain that it uses Figma, ECharts, Zustand, Storybook, tokens, or that it is a code sample.
+- Use semantic HTML and accessible controls first: real buttons, headings, landmarks, labels, `aria-pressed` for toggle chips, and useful chart `aria-label` values.
+- Build mobile-first. Verify phone, tablet, and desktop widths before considering layout work complete.
+- Preserve the container-query example in `ProjectDetailPanel`.
 
-## Figma / App Visual Contract
+## Component And Storybook Conventions
 
-Use Figma REST inspection before changing UI, but do not treat the old Figma layout as immutable. This project is a demonstration artifact. If the running app uses a more realistic or lower-effort implementation pattern, update Figma to match the app rather than over-customizing code to preserve a placeholder mockup.
+- Every reusable dashboard component should have its own Storybook story under `Dashboard/Components/...`.
+- Keep `Dashboard View` as the composed reference story, not the only documentation surface.
+- Expose Storybook controls where props are meaningful: labels, values, deltas, statuses, selected project, empty states, and option-like component states.
+- Token stories should use the installed token documentation addon rather than custom token boards.
+- `npm run build` builds static Storybook into `public/storybook` so Vercel serves `/storybook`. Do not commit generated `public/storybook`.
 
-Read-only Figma inspection command:
+## Testing Conventions
+
+- Use TDD for behavior changes when practical: failing test first, smallest implementation, then refactor.
+- Prefer behavior tests over snapshots.
+- Keep pure utility, store, query, and chart option coverage focused and readable.
+- UI tests should cover important user-visible behavior: filtering, selected project updates, accessible labels, empty states, and responsive class expectations where relevant.
+- Storybook complements tests; it does not replace them.
+
+## Commands
 
 ```bash
-TOKEN=$(security find-generic-password -a "$USER" -s codex-figma-pat -w 2>/dev/null)
-curl -sS -H "X-Figma-Token: $TOKEN" \
-  "https://api.figma.com/v1/files/tIvu2Q2HhCLDTNmpnVr5FC/nodes?ids=16:3&depth=4"
+npm run generate-tailwind-theme
+npm run test
+npm run lint
+npm run build
 ```
 
-Do not print the token. If network is blocked, request escalation for the read-only Figma API call.
+Storybook:
 
-Earlier desktop frame values from the 2026-04-29 Figma REST check:
+```bash
+npm run storybook
+npm run build-storybook
+npm run build-storybook:public
+```
 
-- Frame: `Desktop / 1440`, `1440 x 1020`.
-- Page padding: `28px`.
-- Header: eyebrow `x=28 y=28`, title `x=28 y=52`, copy `x=28 y=104 w=620 h=36`.
-- Main content starts at `y=174`.
-- Client filter rail: `x=28 y=174 w=220 h=710`.
-- KPI cards: four cards at `y=174`, each `250 x 116`, with `22px` horizontal gaps.
-- KPI card x positions: `280`, `552`, `824`, `1096`.
-- Health chart: `x=280 y=326 w=520 h=280`.
-- Risk chart: `x=824 y=326 w=250 h=280`.
-- Selected project panel: `x=1096 y=326 w=316 h=560`.
-- Project table rows: three rows at `x=280`, width `794`, height `64`, y positions `642`, `718`, `794`.
+Final validation before pushing or deploying:
 
-Tablet frame values:
+```bash
+npm run test
+npm run lint
+npm run build
+```
 
-- Frame: `Tablet / 768`, `768 x 1120`.
-- Page padding: `28px`.
-- KPI cards: four cards at `y=174`, each `164 x 116`.
-- Filter chips at `y=322`.
-- Health chart: `x=25 y=374 w=448 h=270`.
-- Risk chart: `x=504 y=374 w=236 h=270`.
-- Project cards: `344 x 146`.
-- Detail panel: `340 x 310`.
+## Deployment
 
-Mobile frame values:
+- Vercel deployment is GitHub-backed.
+- Use default Vercel Next.js settings unless a concrete issue requires otherwise.
+- `npm run build` runs `prebuild`, which regenerates theme CSS and builds Storybook into `public/storybook` before `next build`.
+- `public/storybook`, `.tmp-storybook-public`, `storybook-static`, `.next`, and local tool folders must remain uncommitted.
+- After pushing `main`, verify both:
+  - https://code-sample-three.vercel.app
+  - https://code-sample-three.vercel.app/storybook
 
-- Frame: `Mobile / 390`, `390 x 1500`.
-- Page padding: `28px`.
-- KPI cards stack, each `334 x 116`.
-- Filter chips at `y=698`.
-- Health chart: `334 x 230`.
-- Risk chart: `334 x 230`.
-- Project card: `334 x 146`.
+## Agent Guidance
 
-## Phase 4B Figma/App Convergence Workflow
+Use relevant installed skills before code changes:
 
-The Figma deliverable for this phase is intentionally simple: one page named `App Viewports` with the app represented at three viewport widths. This is a hiring-code-sample reference, not a full design-system file.
-
-Figma target:
-
-- `Mobile / 390` on the left.
-- `Tablet / 768` to the right of mobile.
-- `Desktop / 1440` to the right of tablet.
-- Each frame should show the current app as rendered in the browser at that viewport width.
-- Keep labels/frame names minimal. Do not include token boards, component inventories, implementation notes, or meta explanations.
-
-Workflow:
-
-1. Capture current app screenshots at exact viewport widths: `390`, `768`, and `1440`.
-2. Use those screenshots as visual reference only; Figma should contain editable layers, not flat screenshot imports.
-3. Use a temporary Figma plugin/import route only for canvas editing, then delete the temporary plugin files after the import succeeds.
-4. Render or visually inspect the resulting Figma page and compare it against the browser screenshots.
-5. Pause for user review before marking Phase 4B complete.
-
-If app code changes during this phase:
-
-- Continue TDD for behavior changes.
-- Keep mobile-first responsive, semantic HTML, accessible interactions, and semantic `ad-*` Tailwind token usage.
-- Re-capture affected viewport screenshots before updating Figma.
-
-Final Phase 4B verification:
-
-- Run `npm run test`, `npm run lint`, and `npm run build`.
-- Check that no temporary Figma/plugin files remain in the repo.
-- Confirm Figma shows only the three agreed app viewport frames.
-- Only then mark Phase 4B complete and proceed to Storybook/README work.
-
-## Drift Prevention Rules
-
-- Do not take a whole-page implementation pass when visual parity is the goal.
-- Do not add product features just because the data/model supports them.
-- Do not let the Figma mockup force expensive custom code when a library-native implementation is good enough for the code sample.
-- Do not rely on code inspection alone for visual parity. Use browser screenshots and Figma render screenshots as the check.
-- Do not call a phase complete until browser output has been compared to the current Figma frame after deciding which side should move.
-- If Figma and app disagree, stop and report the difference before continuing, then choose the path of least resistance.
-- If Figma REST is unavailable, say so and ask whether to use the latest screenshot as a temporary source.
-- Prioritize a concise, explainable code sample over speculative production polish.
-
-## Stack Guardrails
-
-- Next.js App Router with `src/app`.
-- React 19 and TypeScript.
-- Tailwind v4 with CSS-first `@theme`.
-- Figma Variables are the design source; exported token files live in `design-tokens/`.
-- Generate Tailwind variables with `npm run generate-tailwind-theme`.
-- Prefer Tailwind utilities backed by semantic `ad-*` tokens for colors, radii, and spacing wherever those tokens exist.
-- Use raw Tailwind values only for structural layout, responsive breakpoints, one-off grid tracks, or values not yet represented in the token set.
-- Appearance follows `prefers-color-scheme`; do not add an in-app theme switcher.
-- White labeling is a future brand axis, separate from light/dark appearance.
-- Keep Server Components as the default; push `"use client"` as low as possible.
-- Keep the default scaffold shape unless the sample needs a specific change.
-- Use mobile-first responsive classes and semantic, accessible HTML by default; this is part of the code sample's front-end fundamentals story.
-- Before each data or UI phase, inspect the current Figma file so implementation follows the live design rather than stale notes.
-
-## TDD Guardrails
-
-- Follow TDD through every phase, not only Phase 1 utilities.
-- For each behavior, write or update the failing test first, implement the smallest useful change, then refactor while keeping tests green.
-- Prefer behavior tests over snapshot-heavy coverage. Use type/domain contract tests where runtime behavior is not yet meaningful.
-- For UI phases, add focused component or interaction tests before implementing the component behavior; Storybook stories complement tests but do not replace them.
-- For charts and data boundaries, keep option builders, selectors, and state transitions testable as pure functions wherever possible.
-- Every phase checkpoint should run `npm run test`, `npm run lint`, and `npm run build` before being considered complete.
-
-## Required Agent Guidance
-
-Before writing application code, use the relevant installed skills/guidance:
-
-- `vercel:nextjs` for App Router, Next.js 16, Server/Client Component, and deployment conventions.
+- `vercel:nextjs` for App Router, Server/Client Component, and Vercel deployment conventions.
 - `vercel:react-best-practices` after editing multiple TSX components.
 - `vercel:vercel-cli` before Vercel linking, deployment, logs, or project settings work.
 - `responsive-design` before responsive layout work.
-- `tailwind-design-system` before Tailwind component styling or token work.
+- `tailwind-design-system` before token or Tailwind system work.
 - `tanstack-query-best-practices` before query/data-boundary changes.
-- If any skill is unavailable in a future session, use `find-skills` or inspect official docs before proceeding.
 
-Also keep this Next.js warning active:
+If a skill is unavailable, use `find-skills` or inspect official docs before proceeding.
 
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
@@ -187,72 +136,24 @@ Also keep this Next.js warning active:
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-## Commands
+## Extension Checklist
 
-```bash
-npm run generate-tailwind-theme
-npm run lint
-npm run build
-```
+Before changing the repo, ask whether the change strengthens the demonstration. Prefer small, explainable improvements over speculative production polish.
 
-Available after Phase 1A:
+When extending the dashboard:
 
-```bash
-npm run test
-npm run test:watch
-```
+- Add or update tests for behavior.
+- Keep components self-contained.
+- Keep tokens flowing through `design-tokens/` and generated `theme.css`.
+- Keep visible UI aligned with the Figma reference or update the Figma reference intentionally.
+- Keep Storybook stories aligned with real app components.
+- Run `npm run test`, `npm run lint`, and `npm run build`.
 
-Available after Phase 5 setup:
+## Known Non-Goals
 
-```bash
-npm run storybook
-npm run build-storybook
-```
-
-## Build Plan
-
-### Phase 1: Data + Utilities
-
-- Phase 1A: install/configure Vitest, add test scripts, define dashboard domain types.
-- Phase 1B: add fixtures and TDD pure utilities before UI.
-- Define typed fixtures for clients, projects, milestones, risks, weekly metrics, and team allocation.
-- Add pure utilities first: filtering, sorting, health calculation, metric aggregation, risk summary, and chart-series builders.
-- Prioritize unit tests for pure utilities.
-
-### Phase 2: App Boundaries
-
-- Add an app provider for TanStack Query and future client providers.
-- Add Zustand for UI-only state: selected client, selected project, filters, date range, chart mode, and mobile panel state.
-- Do not persist dashboard state unless there is a product reason.
-- TDD provider wiring and store actions before using them in the dashboard UI.
-
-### Phase 3: Responsive UI
-
-- Build reusable UI primitives first: button, status badge, metric card, segmented control, empty state.
-- Build dashboard components: header, filter rail, project list/table, project detail panel, risk summary, delivery chart.
-- Implement mobile, tablet, and desktop layouts.
-- Include one component-level container query example for `ProjectDetailPanel`.
-- TDD key component states and interactions before styling refinements.
-
-### Phase 4: Charts
-
-- Add ECharts through a client-only wrapper.
-- Keep ECharts option builders pure and unit-tested.
-- Include health trend, risk distribution, and budget-vs-timeline comparison.
-- TDD chart option builders before wiring ECharts rendering.
-
-### Phase 5: Documentation + Release
-
-- Add Storybook stories for the dashboard surface; OS-driven light/dark remains controlled by `prefers-color-scheme`, not app theme state.
-- Add focused tests for utilities, Zustand actions, chart options, filters, selected project behavior, empty states, and OS-driven dark-mode styling.
-- Polish README with stack choices, token workflow, responsive notes, test commands, Storybook commands, Vercel deploy notes, and next steps.
-- Deploy through GitHub + Vercel and record the production URL only after it exists.
-
-## Deployment Notes
-
-- Public GitHub repo target: `code-sample`.
-- Vercel deployment should be GitHub-backed, not CLI-only.
-- Use default Vercel Next.js settings unless a concrete issue requires otherwise.
-- Validate before deployment with `npm run lint` and `npm run build`.
-- GitHub repo: https://github.com/mundizzle/code-sample
-- Production URL: https://code-sample-three.vercel.app
+- No real backend.
+- No authentication.
+- No user persistence.
+- No in-app theme switcher.
+- No separate job-search tracker or operational workflow inside this repo.
+- No generated build artifacts committed to Git.

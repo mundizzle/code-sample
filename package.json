@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run generate-tailwind-theme",
+    "prebuild": "npm run generate-tailwind-theme && npm run build-storybook:public",
     "build": "next build",
     "generate-tailwind-theme": "node scripts/generate-tailwind-theme.mjs",
     "start": "next start",
     "lint": "eslint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "build-storybook:public": "node scripts/build-storybook-public.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

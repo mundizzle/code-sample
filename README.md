@@ -1,90 +1,195 @@
-# Agency Delivery Dashboard Code Sample
+# Modern UI Architecture Demo: Agency Delivery Dashboard
 
-A focused Next.js code sample for a senior front-end role. The app presents a responsive agency delivery dashboard with fixture-backed data, client-side UI state, ECharts visualizations, semantic Tailwind tokens, and a Figma-to-code token workflow.
+This is a fully coded reference implementation for how I think a modern front-end workflow should fit together. The goal is to show the pieces working as a system: a conventional Next.js and Vercel foundation, Figma-to-Tailwind design tokens, responsive React UI, Storybook as the design-system surface, charting, clear state boundaries, and focused tests.
 
-Figma reference: https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3
+The main idea is reducing drift. Design values, component documentation, application code, and the deployed UI should stay connected instead of being manually copied across tools until they slowly fall out of sync.
 
-## Stack
+## Key Pieces
 
-- Next.js App Router
-- React and TypeScript
-- Tailwind CSS v4
-- Figma-exported design tokens
-- Zustand for UI-only dashboard state
-- TanStack Query for the dashboard data boundary
-- ECharts for browser-rendered charts
-- Vitest and React Testing Library
-- Storybook for component documentation
-- OS-driven light and dark appearance
+- [Source code](https://github.com/mundizzle/code-sample)
+- [Visual design](https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3)
+- [Design system](https://code-sample-three.vercel.app/storybook)
+- [Live application](https://code-sample-three.vercel.app)
 
-## Token Flow
+Desktop screenshot:
 
-Figma Variables are the intended design source of truth. The repo includes Figma-style token files that mirror those variable names and generate the app theme directly.
+![Desktop dashboard view](.github/readme-assets/dashboard-desktop.png)
 
-```bash
-design-tokens/light.tokens.json
-design-tokens/dark.tokens.json
+## Platform and Workflow
+
+The project follows a familiar modern front-end workflow from source control through production deployment. I kept the platform choices recognizable so the architecture, design-token flow, and UI decisions are easy to review.
+
+- **GitHub** keeps the source, docs, and review history in one place.
+- **Vercel** keeps deployment close to the repo, so the live app reflects the main branch.
+- **Next.js App Router** gives the app a standard routing, rendering, and deployment model.
+- **React 19** and **TypeScript** keep the UI component-based while making contracts explicit.
+- **Tailwind CSS v4** connects generated design tokens to the UI without a custom styling layer.
+- **TanStack Query** and **Zustand** keep server/data state separate from local UI state.
+- **ESLint**, **Vitest**, and **React Testing Library** catch regressions at the code, logic, and interaction levels.
+- **Storybook** gives the components and tokens a design-system surface outside the main app.
+
+## Design-To-Dev Workflow
+
+Figma Variables are the design source of truth. The repo carries Figma-style token exports, generates a Tailwind theme bridge, and consumes those values through semantic utilities in the React dashboard. Visual decisions stay portable instead of getting manually transposed into one-off component styles.
+
+```mermaid
+flowchart LR
+  figma["Figma Variables"]
+  tokens["Token JSON<br/>design-tokens/*.tokens.json"]
+  theme["Generated Tailwind theme<br/>src/app/theme.css"]
+  utilities["Semantic utilities<br/>bg-ad-bg, text-ad-text"]
+  app["React dashboard"]
+
+  figma --> tokens --> theme --> utilities --> app
 ```
 
-Generate the Tailwind theme bridge with:
+Figma variable source:
+
+![Figma variables used as the token source](.github/readme-assets/figma_vars.png)
+
+The token contract stays stable across design and code, which makes the handoff easier to reason about:
+
+| Layer | Example |
+| --- | --- |
+| Figma variable | `ad/color/bg` |
+| CSS custom property | `--ad-color-bg` |
+| Tailwind utility | `bg-ad-bg` |
+
+Component styles use semantic Tailwind utilities generated from token names instead of raw values like `#2563EB`. That makes the code read in product terms like background, surface, accent, border, and text instead of implementation terms:
+
+```tsx
+<section className="bg-ad-bg text-ad-text border-ad-border">
+  <button className="bg-ad-accent text-ad-surface">Review</button>
+</section>
+```
+
+The main files in that path are:
+
+| File | Purpose |
+| --- | --- |
+| `design-tokens/light.tokens.json` | Light appearance token export |
+| `design-tokens/dark.tokens.json` | Dark appearance token export |
+| `scripts/generate-tailwind-theme.mjs` | Converts token exports into Tailwind CSS variables |
+| `src/app/theme.css` | Generated theme variables consumed by Tailwind |
+| `src/app/globals.css` | Tailwind entry point for the Next.js app |
+
+When a designer changes a variable in Figma, the implementation path stays small: export the updated token JSON, replace the matching file in `design-tokens/`, run `npm run generate-tailwind-theme`, and let the React UI update through the existing semantic utilities. Update the token once, then let the system carry it through.
+
+## Figma-Aligned Application UI
+
+The Figma `App Viewports` reference and the browser implementation are aligned around the current application. That gives reviewers a practical comparison point: the design file, the component system, and the deployed app are meant to stay in sync, not become separate artifacts that drift over time.
+
+Figma app viewport reference:
+
+![Figma app viewport reference](.github/readme-assets/figma.png)
+
+## Responsive Tailwind UI
+
+The dashboard is mobile-first and responsive across the practical viewport range. Tailwind handles the page-level layout shifts, while `ProjectDetailPanel` includes a component-level container query so the panel can respond to its own available space. Responsiveness stays local where the component needs it, instead of pushing every decision up to the page layout.
+
+Tablet layout:
+
+![Tablet dashboard view](.github/readme-assets/dashboard-tablet.png)
+
+Mobile layout:
+
+![Mobile dashboard view](.github/readme-assets/dashboard-mobile.png)
+
+## Token-Driven Appearance
+
+Light and dark appearance are both token-backed. The app responds to `prefers-color-scheme`, so Tailwind utilities point at CSS variables and the browser updates those variables when the operating system appearance changes. That avoids duplicating theme logic in React and keeps appearance changes in the design-token layer.
+
+Light mode:
+
+![Light mode dashboard](.github/readme-assets/mode_light.png)
+
+Dark mode:
+
+![Dark mode dashboard](.github/readme-assets/mode_dark.png)
+
+Brand is separate from appearance. A fuller white-label system could add brand-specific token sets, for example `default.light.tokens.json`, `default.dark.tokens.json`, `brand.light.tokens.json`, and `brand.dark.tokens.json`. This demo keeps one brand and focuses on the design-to-dev handoff plus OS-driven light/dark support.
+
+## Application Architecture
+
+The application keeps the major boundaries easy to follow. Each kind of complexity has a clear home.
+
+**Application shell**
+
+- **Server Components** remain the default in the **Next.js App Router**.
+- **Client providers** are isolated under `src/app/providers.tsx`.
+
+**State boundaries**
+
+- **TanStack Query** owns the fixture-backed dashboard data boundary.
+- **Zustand** owns UI-only state such as selected client, selected project, filters, date range, chart mode, and mobile panel state.
+
+**Testable logic**
+
+- **Dashboard utilities**, **state transitions**, and **ECharts option builders** are covered by focused tests.
+- **ECharts rendering** is isolated behind a browser-only wrapper, while option builders stay pure and testable.
+
+That gives the demo the state-management shape of a larger production dashboard: server/data state, client UI state, pure domain utilities, and browser-only visualization concerns each have a clear place.
+
+## Component System
+
+Storybook is the design-system surface for this demo. It documents the React dashboard components and the token layer that drives their visual language, which gives the UI a living reference point outside the main app.
+
+Component documentation:
+
+![Storybook component documentation](.github/readme-assets/sb_component.png)
+
+Token documentation:
+
+![Storybook design token documentation](.github/readme-assets/sb_tokens.png)
+
+## Working With The Repo
+
+The sections above explain what this demo is trying to show. This part is the practical repo workflow.
+
+### Install
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+### Run the app
+
+Start the local dev server:
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000 to view the app.
+
+### Regenerate tokens
+
+Regenerate the Tailwind theme bridge from the token files:
 
 ```bash
 npm run generate-tailwind-theme
 ```
 
-That writes:
+### Run the design system
 
-```bash
-src/app/theme.css
-```
-
-The token strategy is intentionally semantic and namespaced:
-
-- Figma variable: `ad/color/bg`
-- Runtime CSS custom property: `--ad-color-bg`
-- Tailwind utility: `bg-ad-bg`
-
-Appearance follows the operating system through `prefers-color-scheme`; there is no in-app theme switcher.
-
-See [docs/design-to-dev-workflow.md](docs/design-to-dev-workflow.md) for the full design-to-dev workflow.
-
-## Getting Started
-
-Install dependencies and run the development server:
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Current Shape
-
-- `src/app/globals.css` imports Tailwind and the generated theme bridge.
-- `src/app/theme.css` is generated from the token files.
-- `scripts/generate-tailwind-theme.mjs` creates the Tailwind CSS bridge.
-- `src/features/dashboard/` contains the domain model, fixtures, utilities, store, query boundary, chart option builders, dashboard UI, tests, and Storybook story.
-- `AGENTS.md` is the active phase guide for future work.
-
-## Validation
-
-```bash
-npm run test
-npm run lint
-npm run build
-npm run build-storybook
-```
-
-Run Storybook locally with:
+Run Storybook locally:
 
 ```bash
 npm run storybook
 ```
 
-## Deploy
+### Validate and build
 
-This project is intended to deploy through a public GitHub repository connected to Vercel with default Next.js settings.
+```bash
+npm run test
+npm run lint
+npm run build
+```
 
-Production URL: https://code-sample-three.vercel.app
-GitHub repo: https://github.com/mundizzle/code-sample
+`npm run build` also regenerates the token theme and builds static Storybook into `public/storybook` before running `next build`.
+
+### Deployment
+
+Vercel is connected to the GitHub repo. Pushes to `main` trigger production deployments, and the static Storybook build ships with the app as the deployed [design system](https://code-sample-three.vercel.app/storybook).

@@ -20,9 +20,12 @@
 # production
 /build
 /storybook-static
+/public/storybook
+/.tmp-storybook-public
 
 # misc
 .DS_Store
+.claude/
 *.pem
 
 # debug
