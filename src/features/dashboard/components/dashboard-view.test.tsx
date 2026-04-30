@@ -49,6 +49,7 @@ describe("DashboardView", () => {
     expect(await screen.findAllByText("Resident Services Hub")).toHaveLength(2);
     expect(screen.getByText("Selected Project")).toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Project list" })).toBeInTheDocument();
+    expect(screen.getByText("3 of 5 shown")).toBeInTheDocument();
   });
 
   it("keeps implementation commentary out of the product UI", async () => {

@@ -19,11 +19,13 @@ const meta = {
     clients: dashboardData.clients,
     projects: dashboardData.projects.slice(0, 3),
     selectedProjectId: "project-resident-services-hub",
+    totalProjectCount: dashboardData.projects.length,
     onSelectProject: fn(),
   },
   argTypes: {
     clients: { table: { disable: true } },
     projects: { table: { disable: true } },
+    totalProjectCount: { control: "number" },
     selectedProjectId: {
       control: "select",
       options: projectOptions,

@@ -12,13 +12,16 @@ const meta = {
     label: "Delivery Health",
     value: "86%",
     delta: "+4%",
-    tone: "text",
+    deltaTone: "positive",
   },
   argTypes: {
     label: { control: "text" },
     value: { control: "text" },
     delta: { control: "text" },
-    tone: { table: { disable: true } },
+    deltaTone: {
+      control: "select",
+      options: ["positive", "negative", "neutral"],
+    },
   },
   render: (args) => (
     <div className="w-64 bg-ad-bg p-6">
@@ -36,9 +39,24 @@ export const Default: Story = {};
 export const Group: Story = {
   render: () => (
     <div className="grid w-[720px] grid-cols-3 gap-4 bg-ad-bg p-6">
-      <MetricCard label="Active Projects" value="5" delta="+2" tone="text" />
-      <MetricCard label="Delivery Health" value="86%" delta="+4%" tone="text" />
-      <MetricCard label="Open Risks" value="8" delta="-2" tone="text" />
+      <MetricCard
+        label="Active Projects"
+        value="5"
+        delta="+2"
+        deltaTone="positive"
+      />
+      <MetricCard
+        label="Delivery Health"
+        value="86%"
+        delta="+4%"
+        deltaTone="positive"
+      />
+      <MetricCard
+        label="Open Risks"
+        value="8"
+        delta="-2"
+        deltaTone="positive"
+      />
     </div>
   ),
 };

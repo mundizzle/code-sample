@@ -69,25 +69,25 @@ export function DashboardView() {
                 label="Active Projects"
                 value={metrics.activeProjects.toString()}
                 delta="+2"
-                tone="text"
+                deltaTone="positive"
               />
               <MetricCard
                 label="Delivery Health"
                 value={`${metrics.deliveryHealthPercent}%`}
                 delta="+4%"
-                tone="text"
+                deltaTone="positive"
               />
               <MetricCard
                 label="Open Risks"
                 value={metrics.openRisks.toString()}
                 delta="-2"
-                tone="text"
+                deltaTone="positive"
               />
               <MetricCard
                 label="Launches"
                 value={metrics.launchesThisMonth.toString()}
                 delta="+1"
-                tone="text"
+                deltaTone="positive"
               />
             </section>
 
@@ -121,6 +121,7 @@ export function DashboardView() {
               clients={data.clients}
               projects={visibleProjects.slice(0, 3)}
               selectedProjectId={selectedProject?.id}
+              totalProjectCount={visibleProjects.length}
               onSelectProject={selectProject}
             />
           </div>

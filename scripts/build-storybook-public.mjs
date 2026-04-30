@@ -5,6 +5,11 @@ const tempDir = ".tmp-storybook-public";
 const publicDir = "public/storybook";
 const defaultStoryPath = "/story/dashboard-dashboard-view--dashboard";
 
+if (process.env.SKIP_STORYBOOK_BUILD === "1") {
+  console.log("Skipping Storybook public build.");
+  process.exit(0);
+}
+
 await rm(tempDir, { force: true, recursive: true });
 await rm(publicDir, { force: true, recursive: true });
 

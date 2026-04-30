@@ -5,6 +5,7 @@ export type ProjectListProps = {
   clients: Client[];
   projects: Project[];
   selectedProjectId?: string;
+  totalProjectCount?: number;
   onSelectProject: (projectId: string) => void;
 };
 
@@ -12,8 +13,14 @@ export function ProjectList({
   clients,
   projects,
   selectedProjectId,
+  totalProjectCount = projects.length,
   onSelectProject,
 }: ProjectListProps) {
+  const projectCountLabel =
+    totalProjectCount > projects.length
+      ? `${projects.length} of ${totalProjectCount} shown`
+      : `${projects.length} shown`;
+
   return (
     <section
       aria-label="Projects"
@@ -21,7 +28,7 @@ export function ProjectList({
     >
       <div className="flex items-center justify-between border-b border-ad-border p-4">
         <h2 className="text-base font-semibold text-ad-text">Projects</h2>
-        <span className="text-sm text-ad-text-muted">{projects.length} shown</span>
+        <span className="text-sm text-ad-text-muted">{projectCountLabel}</span>
       </div>
 
       <ul aria-label="Project list" className="divide-y divide-ad-border">
