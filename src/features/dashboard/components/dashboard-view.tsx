@@ -148,7 +148,7 @@ export function DashboardView() {
   );
 }
 
-function DashboardHeader() {
+export function DashboardHeader() {
   return (
     <header className="max-w-3xl">
       <p className="text-sm font-medium text-ad-accent">Agency Delivery Dashboard</p>
@@ -169,7 +169,7 @@ type MetricCardProps = {
   tone: "text";
 };
 
-function MetricCard({ label, value, delta }: MetricCardProps) {
+export function MetricCard({ label, value, delta }: MetricCardProps) {
   return (
     <article className="min-h-28 w-full min-w-0 rounded-ad-md border border-ad-border bg-ad-surface p-5">
       <div className="flex items-start justify-between gap-4">
@@ -187,7 +187,7 @@ type FilterPanelProps = {
   onToggleClient: (clientId: string) => void;
 };
 
-function FilterPanel({
+export function FilterPanel({
   clients,
   selectedClientIds,
   onToggleClient,
@@ -199,7 +199,7 @@ function FilterPanel({
     >
       <fieldset>
         <legend className="text-base font-semibold text-ad-text">Clients</legend>
-        <div className="mt-5 flex flex-col gap-3">
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           {clients.map((client, index) => {
             const isSelected =
               selectedClientIds.includes(client.id) ||
@@ -211,7 +211,7 @@ function FilterPanel({
                 type="button"
                 aria-pressed={isSelected}
                 onClick={() => onToggleClient(client.id)}
-                className={`min-h-11 w-full rounded-ad-sm border px-4 py-2 text-left text-sm font-medium transition ${
+                className={`min-h-11 w-full rounded-ad-sm border px-4 py-2 text-left text-sm font-medium transition sm:w-auto ${
                   isSelected
                     ? "border-ad-accent bg-ad-accent text-white"
                     : "border-ad-border bg-ad-surface text-ad-text-muted hover:border-ad-accent hover:text-ad-text"
@@ -237,7 +237,7 @@ type ChartPanelProps = {
   children: React.ReactNode;
 };
 
-function ChartPanel({ title, description, children }: ChartPanelProps) {
+export function ChartPanel({ title, description, children }: ChartPanelProps) {
   const headingId = `${title.toLowerCase().replaceAll(" ", "-")}-heading`;
 
   return (
@@ -261,7 +261,7 @@ type ProjectListProps = {
   onSelectProject: (projectId: string) => void;
 };
 
-function ProjectList({
+export function ProjectList({
   clients,
   projects,
   selectedProjectId,
@@ -310,7 +310,7 @@ function ProjectList({
   );
 }
 
-function StatusBadge({ status }: { status: ProjectStatus }) {
+export function StatusBadge({ status }: { status: ProjectStatus }) {
   return (
     <span className="inline-flex w-fit rounded-ad-sm border border-ad-border bg-ad-bg px-2.5 py-1 text-xs font-medium text-ad-text-muted">
       {statusLabels[status]}
@@ -318,7 +318,7 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
   );
 }
 
-function ProjectDetailPanel({ project }: { project?: Project }) {
+export function ProjectDetailPanel({ project }: { project?: Project }) {
   if (!project) {
     return (
       <section

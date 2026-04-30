@@ -74,15 +74,17 @@ describe("DashboardView", () => {
     expect(within(projectList).queryByText("Care Pathways")).not.toBeInTheDocument();
   });
 
-  it("keeps client controls stacked and full-width for narrow layouts", async () => {
+  it("stacks client controls on phones and lets them wrap horizontally on tablets", async () => {
     renderDashboard();
 
     const civicWorksButton = await screen.findByRole("button", { name: "CivicWorks" });
     const chipStack = civicWorksButton.parentElement;
 
     expect(chipStack).toHaveClass("flex-col");
-    expect(chipStack).not.toHaveClass("flex-wrap");
+    expect(chipStack).toHaveClass("sm:flex-row");
+    expect(chipStack).toHaveClass("sm:flex-wrap");
     expect(civicWorksButton).toHaveClass("w-full");
+    expect(civicWorksButton).toHaveClass("sm:w-auto");
 
     const supportingCopy = screen.getByText(
       "Focus the portfolio by client to review delivery health and launch readiness.",

@@ -1,0 +1,49 @@
+/**
+ * @tokens Colors
+ * @presenter Color
+ */
+:root {
+  --ad-color-bg: #F6F7FB; /* Page background. Figma: ad/color/bg. Tailwind: bg-ad-bg. */
+  --ad-color-surface: #FFFFFF; /* Card and panel surface. Figma: ad/color/surface. Tailwind: bg-ad-surface. */
+  --ad-color-surface-elevated: #EEF2F7; /* Selected/elevated surface. Figma: ad/color/surface-elevated. Tailwind: bg-ad-surface-elevated. */
+  --ad-color-text: #111827; /* Primary text. Figma: ad/color/text. Tailwind: text-ad-text. */
+  --ad-color-text-muted: #667085; /* Secondary text. Figma: ad/color/text-muted. Tailwind: text-ad-text-muted. */
+  --ad-color-border: #D8DEE8; /* Borders and dividers. Figma: ad/color/border. Tailwind: border-ad-border. */
+  --ad-color-accent: #2563EB; /* Primary action/accent. Figma: ad/color/accent. Tailwind: bg-ad-accent, text-ad-accent. */
+  --ad-color-success: #15803D; /* Positive status. Figma: ad/color/success. Tailwind: text-ad-success. */
+  --ad-color-warning: #D97706; /* Warning status. Figma: ad/color/warning. Tailwind: text-ad-warning. */
+  --ad-color-danger: #DC2626; /* Critical status. Figma: ad/color/danger. Tailwind: text-ad-danger. */
+}
+
+/**
+ * @tokens Chart Colors
+ * @presenter Color
+ */
+:root {
+  --ad-chart-series-1: #2563EB; /* Figma: ad/chart/series-1. Tailwind: text-ad-chart-series-1. */
+  --ad-chart-series-2: #14B8A6; /* Figma: ad/chart/series-2. Tailwind: text-ad-chart-series-2. */
+  --ad-chart-series-3: #F59E0B; /* Figma: ad/chart/series-3. Tailwind: text-ad-chart-series-3. */
+  --ad-chart-series-4: #EF4444; /* Figma: ad/chart/series-4. Tailwind: text-ad-chart-series-4. */
+}
+
+/**
+ * @tokens Radius
+ * @presenter BorderRadius
+ */
+:root {
+  --ad-radius-sm: 4px; /* Figma: ad/radius/sm. Tailwind: rounded-ad-sm. */
+  --ad-radius-md: 8px; /* Figma: ad/radius/md. Tailwind: rounded-ad-md. */
+  --ad-radius-lg: 12px; /* Figma: ad/radius/lg. Tailwind: rounded-ad-lg. */
+}
+
+/**
+ * @tokens Spacing
+ * @presenter Spacing
+ */
+:root {
+  --ad-space-2: 8px; /* Figma: ad/space/2. */
+  --ad-space-3: 12px; /* Figma: ad/space/3. */
+  --ad-space-4: 16px; /* Figma: ad/space/4. */
+  --ad-space-6: 24px; /* Figma: ad/space/6. */
+  --ad-space-8: 32px; /* Figma: ad/space/8. */
+}
