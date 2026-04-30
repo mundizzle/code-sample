@@ -1,8 +1,8 @@
 # Modern UI Architecture Demo: Agency Delivery Dashboard
 
-This is a fully coded reference implementation for how I think a modern front-end workflow should fit together. The goal is to show the pieces working as a system: a conventional Next.js and Vercel foundation, Figma-to-Tailwind design tokens, responsive React UI, Storybook as the design-system surface, charting, clear state boundaries, and focused tests.
+This is a fully coded reference implementation for how I think a modern front-end workflow should fit together. It distills the parts of front-end development that I have had the most success with on real projects: a conventional framework and deployment foundation, design tokens wired into code, responsive UI, a design-system surface, charting, clear state boundaries, and focused tests.
 
-The main idea is reducing drift. Design values, component documentation, application code, and the deployed UI should stay connected instead of being manually copied across tools until they slowly fall out of sync.
+The main idea is reducing drift while still using tools that can handle real application complexity. Design values, component documentation, application code, and the deployed UI should stay connected instead of being manually copied across tools until they slowly fall out of sync. At the same time, the architecture needs to hold up for heavy UI state, interactive data, and product surfaces that behave more like applications than static websites.
 
 ## Key Pieces
 
@@ -17,20 +17,20 @@ Desktop screenshot:
 
 ## Platform and Workflow
 
-The project follows a familiar modern front-end workflow from source control through production deployment. I kept the platform choices recognizable so the architecture, design-token flow, and UI decisions are easy to review.
+The project follows a familiar modern front-end workflow from source control through production deployment. I intentionally leaned on common, battle-tested tools here. Popularity matters in front-end work, for better or worse: widely used tools have more people finding bugs, fixing bugs, writing docs, answering questions, and publishing examples when something breaks.
 
-- **GitHub** keeps the source, docs, and review history in one place.
-- **Vercel** keeps deployment close to the repo, so the live app reflects the main branch.
-- **Next.js App Router** gives the app a standard routing, rendering, and deployment model.
-- **React 19** and **TypeScript** keep the UI component-based while making contracts explicit.
-- **Tailwind CSS v4** connects generated design tokens to the UI without a custom styling layer.
-- **TanStack Query** and **Zustand** keep server/data state separate from local UI state.
-- **ESLint**, **Vitest**, and **React Testing Library** catch regressions at the code, logic, and interaction levels.
-- **Storybook** gives the components and tokens a design-system surface outside the main app.
+- **[GitHub](https://github.com/)** keeps the source, docs, and review history in one place.
+- **[Vercel](https://vercel.com/)** keeps deployment close to the repo, so the live app reflects the main branch.
+- **[Next.js App Router](https://nextjs.org/docs/app)** gives the app a standard routing, rendering, and deployment model.
+- **[React 19](https://react.dev/)** and **[TypeScript](https://www.typescriptlang.org/)** keep the UI component-based while making contracts explicit. TypeScript is doing real work here: it catches whole categories of mistakes and makes refactors safer.
+- **[Tailwind CSS v4](https://tailwindcss.com/)** connects generated design tokens to the UI without a custom styling layer.
+- **[TanStack Query](https://tanstack.com/query/latest)** and **[Zustand](https://zustand.docs.pmnd.rs/)** keep server/data state separate from local UI state.
+- **[ESLint](https://eslint.org/)**, **[Vitest](https://vitest.dev/)**, and **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)** catch regressions at the code, logic, and interaction levels.
+- **[Storybook](https://storybook.js.org/)** gives the components and tokens a design-system surface outside the main app.
 
 ## Design-To-Dev Workflow
 
-Figma Variables are the design source of truth. The repo carries Figma-style token exports, generates a Tailwind theme bridge, and consumes those values through semantic utilities in the React dashboard. Visual decisions stay portable instead of getting manually transposed into one-off component styles.
+[Figma Variables](https://help.figma.com/hc/en-us/articles/15339657135383-Guide-to-variables-in-Figma) are the design source of truth. The repo carries Figma-style token exports, generates a Tailwind theme bridge, and consumes those values through semantic utilities in the React dashboard. This is the part of the workflow that solves one of the most common handoff problems: no more copying values from Figma into code by hand and hoping every place stays current.
 
 ```mermaid
 flowchart LR
@@ -55,7 +55,7 @@ The token contract stays stable across design and code, which makes the handoff 
 | CSS custom property | `--ad-color-bg` |
 | Tailwind utility | `bg-ad-bg` |
 
-Component styles use semantic Tailwind utilities generated from token names instead of raw values like `#2563EB`. That makes the code read in product terms like background, surface, accent, border, and text instead of implementation terms:
+Component styles use semantic Tailwind utilities generated from token names instead of raw values like `#2563EB`. That keeps the UI using values from the design system instead of random primitives, and it makes the code read in product terms like background, surface, accent, border, and text:
 
 ```tsx
 <section className="bg-ad-bg text-ad-text border-ad-border">
@@ -97,7 +97,7 @@ Mobile layout:
 
 ## Token-Driven Appearance
 
-Light and dark appearance are both token-backed. The app responds to `prefers-color-scheme`, so Tailwind utilities point at CSS variables and the browser updates those variables when the operating system appearance changes. That avoids duplicating theme logic in React and keeps appearance changes in the design-token layer.
+Light and dark appearance are both token-backed. The app responds to `prefers-color-scheme`, so Tailwind utilities point at CSS variables and the browser updates those variables when the operating system appearance changes. The semantic Tailwind layer gives light and dark mode support without scattering conditional theme logic through the React tree.
 
 Light mode:
 
@@ -111,7 +111,7 @@ Brand is separate from appearance. A fuller white-label system could add brand-s
 
 ## Application Architecture
 
-The application keeps the major boundaries easy to follow. Each kind of complexity has a clear home.
+The application keeps the major boundaries easy to follow. Each kind of complexity has a clear home, which matters once the UI has real data, filters, charts, selected records, and user-driven state changes.
 
 **Application shell**
 
@@ -123,16 +123,20 @@ The application keeps the major boundaries easy to follow. Each kind of complexi
 - **TanStack Query** owns the fixture-backed dashboard data boundary.
 - **Zustand** owns UI-only state such as selected client, selected project, filters, date range, chart mode, and mobile panel state.
 
+I like this pairing because it keeps two very different kinds of state from getting tangled. TanStack Query is good at data loading, caching, and refresh behavior. Zustand is good at the local state that drives interaction, filtering, sorting, chart modes, and selected UI panels. That split mattered a lot on Wilson QBX, where the UI had to track thousands of football throws, plot them on charts, and still support interactive filtering and sorting.
+
 **Testable logic**
 
-- **Dashboard utilities**, **state transitions**, and **ECharts option builders** are covered by focused tests.
+- **Dashboard utilities**, **state transitions**, and **[ECharts](https://echarts.apache.org/) option builders** are covered by focused tests.
 - **ECharts rendering** is isolated behind a browser-only wrapper, while option builders stay pure and testable.
+
+I used ECharts because it has held up well for me on data-heavy projects, including [Wilson QBX](https://qbx.wilson.com/) and [Peak Performance Project (P3)](https://app.p3.md). QBX was a Bluetooth-connected football launch now used by NFL, Division I college, and elite high-school programs. P3 was an athlete biomechanics platform used by professional athletes and in the NBA Pro Basketball Combine. ECharts handled large volumes of data while still allowing detailed visual customization. Keeping the option builders pure also makes the chart behavior much easier to test.
 
 That gives the demo the state-management shape of a larger production dashboard: server/data state, client UI state, pure domain utilities, and browser-only visualization concerns each have a clear place.
 
 ## Component System
 
-Storybook is the design-system surface for this demo. It documents the React dashboard components and the token layer that drives their visual language, which gives the UI a living reference point outside the main app.
+Storybook is the design-system surface for this demo. I have found it especially useful with clients because it makes the component breakdown visible outside the main app. It also makes it easier to prototype and assemble new pages from existing pieces instead of starting from a blank screen every time.
 
 Component documentation:
 
