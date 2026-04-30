@@ -1,4 +1,4 @@
-import { cp, rm } from "node:fs/promises";
+import { cp, readFile, rm, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 
 const tempDir = ".tmp-storybook-public";
@@ -29,4 +29,15 @@ await new Promise((resolve, reject) => {
 });
 
 await cp(tempDir, publicDir, { recursive: true });
+await fixManagerAssetPaths();
 await rm(tempDir, { force: true, recursive: true });
+
+async function fixManagerAssetPaths() {
+  const indexPath = `${publicDir}/index.html`;
+  const html = await readFile(indexPath, "utf8");
+  const fixedHtml = html
+    .replaceAll('href="./sb-', 'href="/storybook/sb-')
+    .replaceAll("import './sb-", "import '/storybook/sb-");
+
+  await writeFile(indexPath, fixedHtml);
+}
