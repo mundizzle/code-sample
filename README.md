@@ -1,8 +1,8 @@
-# Modern UI Architecture Demo: Agency Delivery Dashboard
+# About this repo
 
-This is a fully coded reference implementation for how I think a modern front-end workflow should fit together. It distills the parts of front-end development that I have had the most success with on real projects: a conventional framework and deployment foundation, design tokens wired into code, responsive UI, a design-system surface, charting, clear state boundaries, and focused tests.
+This is a fully coded reference implementation for how I think a modern front-end workflow should fit together. It distills the parts of front-end development that I have had the most success with on real projects: a conventional framework and deployment foundation, design tokens wired into code, responsive UI, a design-system layer, charting, clear state boundaries, and focused tests.
 
-The main idea is reducing drift while still using tools that can handle real application complexity. Design values, component documentation, application code, and the deployed UI should stay connected instead of being manually copied across tools until they slowly fall out of sync. At the same time, the architecture needs to hold up for heavy UI state, interactive data, and product surfaces that behave more like applications than static websites.
+The main idea is reducing drift while still using tools that can handle real application complexity. Design values, component documentation, application code, and the deployed UI should stay connected instead of being manually copied across tools until they slowly fall out of sync. At the same time, the architecture needs to hold up for heavy UI state, interactive data, and projects that behave more like applications than static websites.
 
 ## Key Pieces
 
@@ -26,7 +26,7 @@ The project follows a familiar modern front-end workflow from source control thr
 - **[Tailwind CSS v4](https://tailwindcss.com/)** connects generated design tokens to the UI without a custom styling layer.
 - **[TanStack Query](https://tanstack.com/query/latest)** and **[Zustand](https://zustand.docs.pmnd.rs/)** keep server/data state separate from local UI state.
 - **[ESLint](https://eslint.org/)**, **[Vitest](https://vitest.dev/)**, and **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)** catch regressions at the code, logic, and interaction levels.
-- **[Storybook](https://storybook.js.org/)** gives the components and tokens a design-system surface outside the main app.
+- **[Storybook](https://storybook.js.org/)** gives the components and tokens a design-system home outside the main app.
 
 ## Design-To-Dev Workflow
 
@@ -136,7 +136,7 @@ That gives the demo the state-management shape of a larger production dashboard:
 
 ## Component System
 
-Storybook is the design-system surface for this demo. I have found it especially useful with clients because it makes the component breakdown visible outside the main app. It also makes it easier to prototype and assemble new pages from existing pieces instead of starting from a blank screen every time.
+Storybook is the design-system home for this demo. I have found it especially useful with clients because it makes the component breakdown visible outside the main app. It also makes it easier to prototype and assemble new pages from existing pieces instead of starting from a blank screen every time.
 
 Component documentation:
 
