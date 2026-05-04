@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "storybook-static/**",
     "public/storybook/**",
+    "public/mockServiceWorker.js",
     ".tmp-storybook-public/**",
     "next-env.d.ts",
   ]),

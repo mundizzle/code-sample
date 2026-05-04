@@ -13,11 +13,11 @@ export function ProjectList({
   clients,
   projects,
   selectedProjectId,
-  totalProjectCount = projects.length,
+  totalProjectCount,
   onSelectProject,
 }: ProjectListProps) {
   const projectCountLabel =
-    totalProjectCount > projects.length
+    totalProjectCount !== undefined
       ? `${projects.length} of ${totalProjectCount} shown`
       : `${projects.length} shown`;
 

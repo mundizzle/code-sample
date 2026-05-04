@@ -107,7 +107,20 @@ export type TeamAllocation = {
   capacityHours: number;
 };
 
+export type DashboardReportingComparison = {
+  activeProjects: number;
+  deliveryHealthPercent: number;
+  openRisks: number;
+  launchesThisMonth: number;
+};
+
+export type DashboardReporting = {
+  currentMonth: IsoDate;
+  comparison: DashboardReportingComparison;
+};
+
 export type DashboardData = {
+  reporting: DashboardReporting;
   clients: Client[];
   projects: Project[];
   milestones: Milestone[];

@@ -33,6 +33,11 @@ export type DashboardMetrics = {
   launchesThisMonth: number;
 };
 
+export type MetricDelta = {
+  label: string;
+  tone: "positive" | "negative" | "neutral";
+};
+
 export type RiskSummary = {
   totalOpen: number;
   byLevel: Record<RiskLevel, number>;
@@ -80,6 +85,28 @@ export function sortProjects(projects: Project[], sort: ProjectSort): Project[] 
   });
 }
 
+export function buildDashboardDataSlice(
+  data: DashboardData,
+  projects: Project[],
+): DashboardData {
+  const projectIds = new Set(projects.map((project) => project.id));
+
+  return {
+    ...data,
+    projects,
+    risks: data.risks.filter((risk) => projectIds.has(risk.projectId)),
+    milestones: data.milestones.filter((milestone) =>
+      projectIds.has(milestone.projectId),
+    ),
+    weeklyMetrics: data.weeklyMetrics.filter((metric) =>
+      projectIds.has(metric.projectId),
+    ),
+    teamAllocations: data.teamAllocations.filter((allocation) =>
+      projectIds.has(allocation.projectId),
+    ),
+  };
+}
+
 export function calculateProjectHealth(inputs: HealthInputs): ProjectHealth {
   const score = clamp(
     100 -
@@ -119,6 +146,27 @@ export function aggregateDashboardMetrics(
     launchesThisMonth: activeProjects.filter((project) =>
       project.targetLaunchDate.startsWith(monthPrefix),
     ).length,
+  };
+}
+
+export function buildMetricDelta(
+  current: number,
+  previous: number,
+  options: { suffix?: string; lowerIsBetter?: boolean } = {},
+): MetricDelta {
+  const difference = current - previous;
+  const absoluteLabel =
+    difference > 0 ? `+${difference}` : difference.toString();
+  const improved = options.lowerIsBetter ? difference < 0 : difference > 0;
+
+  return {
+    label: `${absoluteLabel}${options.suffix ?? ""}`,
+    tone:
+      difference === 0
+        ? "neutral"
+        : improved
+          ? "positive"
+          : "negative",
   };
 }
 

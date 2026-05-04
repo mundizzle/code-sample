@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import { dashboardData } from "../data/fixtures";
 import {
   aggregateDashboardMetrics,
+  buildDashboardDataSlice,
   buildHealthTrendSeries,
+  buildMetricDelta,
   buildRiskSummary,
   calculateProjectHealth,
   filterProjects,
@@ -66,6 +68,25 @@ describe("sortProjects", () => {
   });
 });
 
+describe("buildDashboardDataSlice", () => {
+  it("keeps related records for the provided projects", () => {
+    const civicWorksProjects = filterProjects(dashboardData.projects, {
+      clientIds: ["client-civicworks"],
+    });
+    const slice = buildDashboardDataSlice(dashboardData, civicWorksProjects);
+
+    expect(slice.projects.map((project) => project.name)).toEqual([
+      "Resident Services Hub",
+      "Grant Eligibility Portal",
+    ]);
+    expect(slice.risks).toHaveLength(5);
+    expect(slice.weeklyMetrics).toHaveLength(8);
+    expect(slice.milestones.every((milestone) =>
+      civicWorksProjects.some((project) => project.id === milestone.projectId),
+    )).toBe(true);
+  });
+});
+
 describe("calculateProjectHealth", () => {
   it("maps operating signals to a status and score", () => {
     expect(
@@ -98,6 +119,15 @@ describe("aggregateDashboardMetrics", () => {
     expect(
       aggregateDashboardMetrics(
         {
+          reporting: {
+            currentMonth: "2026-05-01",
+            comparison: {
+              activeProjects: 0,
+              deliveryHealthPercent: 0,
+              openRisks: 0,
+              launchesThisMonth: 0,
+            },
+          },
           clients: [],
           projects: [],
           milestones: [],
@@ -112,6 +142,23 @@ describe("aggregateDashboardMetrics", () => {
       deliveryHealthPercent: 0,
       openRisks: 0,
       launchesThisMonth: 0,
+    });
+  });
+});
+
+describe("buildMetricDelta", () => {
+  it("formats directional KPI deltas from reporting baselines", () => {
+    expect(buildMetricDelta(5, 3)).toEqual({
+      label: "+2",
+      tone: "positive",
+    });
+    expect(buildMetricDelta(86, 82, { suffix: "%" })).toEqual({
+      label: "+4%",
+      tone: "positive",
+    });
+    expect(buildMetricDelta(8, 10, { lowerIsBetter: true })).toEqual({
+      label: "-2",
+      tone: "positive",
     });
   });
 });

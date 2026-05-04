@@ -1,7 +1,11 @@
 import type { Preview } from "@storybook/nextjs";
 import { withThemeByDataAttribute } from "@storybook/addon-themes";
+import { initialize, mswLoader } from "msw-storybook-addon";
 
+import { dashboardMockHandlers } from "../src/features/dashboard/data/mock-handlers";
 import "../src/app/globals.css";
+
+initialize();
 
 const preview: Preview = {
   decorators: [
@@ -14,6 +18,7 @@ const preview: Preview = {
       attributeName: "data-storybook-theme",
     }),
   ],
+  loaders: [mswLoader],
   parameters: {
     controls: {
       matchers: {
@@ -22,6 +27,9 @@ const preview: Preview = {
       },
     },
     layout: "fullscreen",
+    msw: {
+      handlers: dashboardMockHandlers,
+    },
   },
 };
 

@@ -35,6 +35,15 @@ describe("dashboard domain model", () => {
     } satisfies Project;
 
     const dashboardData = {
+      reporting: {
+        currentMonth: "2026-05-01",
+        comparison: {
+          activeProjects: 0,
+          deliveryHealthPercent: 0,
+          openRisks: 0,
+          launchesThisMonth: 0,
+        },
+      },
       clients: [client],
       projects: [project],
       milestones: [],

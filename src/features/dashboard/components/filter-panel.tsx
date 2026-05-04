@@ -19,10 +19,8 @@ export function FilterPanel({
       <fieldset>
         <legend className="text-base font-semibold text-ad-text">Clients</legend>
         <div className="mt-5 flex flex-col gap-3 @sm/filter-panel:flex-row @sm/filter-panel:flex-wrap">
-          {clients.map((client, index) => {
-            const isSelected =
-              selectedClientIds.includes(client.id) ||
-              (selectedClientIds.length === 0 && index === 0);
+          {clients.map((client) => {
+            const isSelected = selectedClientIds.includes(client.id);
 
             return (
               <button

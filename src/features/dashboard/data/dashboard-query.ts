@@ -1,9 +1,9 @@
 import { QueryClient, queryOptions } from "@tanstack/react-query";
 
 import type { DashboardData } from "../types";
-import { dashboardData } from "./fixtures";
 
 const dashboardStaleTime = 60_000;
+const dashboardEndpoint = "/api/dashboard";
 
 export const dashboardKeys = {
   all: ["dashboard"] as const,
@@ -11,7 +11,13 @@ export const dashboardKeys = {
 };
 
 export async function getDashboardData(): Promise<DashboardData> {
-  return structuredClone(dashboardData);
+  const response = await fetch(dashboardEndpoint);
+
+  if (!response.ok) {
+    throw new Error(`Dashboard request failed with ${response.status}`);
+  }
+
+  return response.json() as Promise<DashboardData>;
 }
 
 export function dashboardDataQueryOptions() {
@@ -28,6 +34,7 @@ export function createDashboardQueryClient(): QueryClient {
       queries: {
         staleTime: dashboardStaleTime,
         refetchOnWindowFocus: false,
+        retry: false,
       },
     },
   });

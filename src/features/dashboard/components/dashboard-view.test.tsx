@@ -1,9 +1,10 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createDashboardQueryClient } from "../data/dashboard-query";
+import { dashboardData } from "../data/fixtures";
 import { DashboardStoreProvider } from "../state/dashboard-store-provider";
 import { DashboardView } from "./dashboard-view";
 
@@ -18,6 +19,14 @@ function renderDashboard() {
 }
 
 describe("DashboardView", () => {
+  beforeEach(() => {
+    vi.stubGlobal("fetch", vi.fn(async () => Response.json(dashboardData)));
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("renders the product dashboard content", async () => {
     renderDashboard();
 
@@ -30,7 +39,9 @@ describe("DashboardView", () => {
       ),
     ).toBeInTheDocument();
     expect(screen.getByRole("main")).toBeInTheDocument();
-    expect(screen.getByRole("complementary", { name: "Dashboard filters" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("complementary", { name: "Dashboard filters" }),
+    ).toBeInTheDocument();
     expect(await screen.findByText("Active Projects")).toBeInTheDocument();
     expect(screen.getByText("5")).toBeInTheDocument();
     expect(screen.getByText("Delivery Health")).toBeInTheDocument();
@@ -49,7 +60,11 @@ describe("DashboardView", () => {
     expect(await screen.findAllByText("Resident Services Hub")).toHaveLength(2);
     expect(screen.getByText("Selected Project")).toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Project list" })).toBeInTheDocument();
-    expect(screen.getByText("3 of 5 shown")).toBeInTheDocument();
+    expect(screen.getByText("5 of 5 shown")).toBeInTheDocument();
+    expect(screen.getByText("Care Pathways")).toBeInTheDocument();
+    expect(screen.getByText("Marketplace Refresh")).toBeInTheDocument();
+    expect(screen.getByText("Grant Eligibility Portal")).toBeInTheDocument();
+    expect(screen.getByText("Loyalty Insights")).toBeInTheDocument();
   });
 
   it("keeps implementation commentary out of the product UI", async () => {
@@ -67,12 +82,52 @@ describe("DashboardView", () => {
     renderDashboard();
 
     await screen.findAllByText("Resident Services Hub");
-    await user.click(screen.getByRole("button", { name: "CivicWorks", pressed: true }));
+    await user.click(screen.getByRole("button", { name: "CivicWorks", pressed: false }));
 
     const projectList = screen.getByRole("region", { name: "Projects" });
     expect(within(projectList).getByText("Resident Services Hub")).toBeInTheDocument();
     expect(within(projectList).getByText("Grant Eligibility Portal")).toBeInTheDocument();
     expect(within(projectList).queryByText("Care Pathways")).not.toBeInTheDocument();
+    expect(within(projectList).getByText("2 of 5 shown")).toBeInTheDocument();
+    expect(screen.getByText("74%")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+  });
+
+  it("allows all client filters to be unselected", async () => {
+    const user = userEvent.setup();
+    renderDashboard();
+
+    await screen.findAllByText("Resident Services Hub");
+
+    const civicWorksButton = screen.getByRole("button", {
+      name: "CivicWorks",
+      pressed: false,
+    });
+    expect(civicWorksButton).toBeInTheDocument();
+
+    await user.click(civicWorksButton);
+    expect(
+      screen.getByRole("button", { name: "CivicWorks", pressed: true }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "CivicWorks", pressed: true }));
+    expect(
+      screen.getByRole("button", { name: "CivicWorks", pressed: false }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("5 of 5 shown")).toBeInTheDocument();
+  });
+
+  it("shows filtered project count against the full project total", async () => {
+    const user = userEvent.setup();
+    renderDashboard();
+
+    await screen.findAllByText("Resident Services Hub");
+    await user.click(screen.getByRole("button", { name: "Northstar Health" }));
+
+    const projectList = screen.getByRole("region", { name: "Projects" });
+    expect(within(projectList).getByText("Care Pathways")).toBeInTheDocument();
+    expect(within(projectList).getByText("1 of 5 shown")).toBeInTheDocument();
+    expect(screen.getByText("96%")).toBeInTheDocument();
   });
 
   it("stacks client controls in narrow containers and lets them wrap in wide containers", async () => {
@@ -88,6 +143,7 @@ describe("DashboardView", () => {
     expect(chipStack).toHaveClass("@sm/filter-panel:flex-wrap");
     expect(civicWorksButton).toHaveClass("w-full");
     expect(civicWorksButton).toHaveClass("@sm/filter-panel:w-auto");
+    expect(civicWorksButton).toHaveAttribute("aria-pressed", "false");
 
     const supportingCopy = screen.getByText(
       "Focus the portfolio by client to review delivery health and launch readiness.",
