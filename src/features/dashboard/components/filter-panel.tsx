@@ -14,11 +14,11 @@ export function FilterPanel({
   return (
     <aside
       aria-label="Dashboard filters"
-      className="w-full min-w-0 rounded-ad-md border border-ad-border bg-ad-surface p-5 lg:min-h-[710px] xl:sticky xl:top-8 xl:self-start"
+      className="@container/filter-panel w-full min-w-0 rounded-ad-md border border-ad-border bg-ad-surface p-5 lg:min-h-[710px] xl:sticky xl:top-8 xl:self-start"
     >
       <fieldset>
         <legend className="text-base font-semibold text-ad-text">Clients</legend>
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="mt-5 flex flex-col gap-3 @sm/filter-panel:flex-row @sm/filter-panel:flex-wrap">
           {clients.map((client, index) => {
             const isSelected =
               selectedClientIds.includes(client.id) ||
@@ -30,7 +30,7 @@ export function FilterPanel({
                 type="button"
                 aria-pressed={isSelected}
                 onClick={() => onToggleClient(client.id)}
-                className={`min-h-11 w-full rounded-ad-sm border px-4 py-2 text-left text-sm font-medium transition sm:w-auto ${
+                className={`min-h-11 w-full rounded-ad-sm border px-4 py-2 text-left text-sm font-medium transition @sm/filter-panel:w-auto ${
                   isSelected
                     ? "border-ad-accent bg-ad-accent text-white"
                     : "border-ad-border bg-ad-surface text-ad-text-muted hover:border-ad-accent hover:text-ad-text"
