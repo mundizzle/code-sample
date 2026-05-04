@@ -48,19 +48,30 @@ Vercel is GitHub-backed. Pushes to `main` deploy production.
 - `scripts/generate-tailwind-theme.mjs` - token JSON to `src/app/theme.css`.
 - `scripts/build-storybook-public.mjs` - static Storybook build for `/storybook` on Vercel.
 - `src/app/` - Next.js App Router shell, metadata, providers, and global CSS.
-- `src/features/dashboard/types.ts` - dashboard domain model.
-- `src/features/dashboard/data/` - deterministic fixtures and TanStack Query boundary.
-- `src/features/dashboard/state/` - per-instance Zustand vanilla store and provider.
-- `src/features/dashboard/utils/` - pure filtering, sorting, KPI, risk, and trend utilities.
-- `src/features/dashboard/charts/` - ECharts palette hook and pure option builders.
-- `src/features/dashboard/components/` - real dashboard components, tests, and component stories.
-- `src/features/dashboard/foundations/` - Storybook design-token documentation.
+- `src/app/api/dashboard/` - mock dashboard API route, route test, and JSON response payload.
+- `src/dashboard.tsx` - app dashboard screen composition.
+- `src/dashboard.test.tsx` - composed dashboard behavior test.
+- `src/dashboard.stories.tsx` - composed dashboard Storybook reference.
+- `src/components/header/` - dashboard header component.
+- `src/components/filters/` - client filter panel.
+- `src/components/metrics/` - KPI metric cards.
+- `src/components/chart-panel/` - reusable chart panel shell.
+- `src/components/health-trend-chart/` - health trend chart component, option builder, test, and story.
+- `src/components/risk-distribution-chart/` - risk distribution chart component, option builder, test, and story.
+- `src/lib/echarts/` - internal ECharts adapter, palette fallback, and token palette hook.
+- `src/components/projects/` - project list and status badge.
+- `src/components/selected-project/` - selected project detail panel.
+- `src/model/` - app domain types, labels, formatters, and pure filtering/aggregation utilities.
+- `src/data/query/` - TanStack Query boundary for `/api/dashboard`.
+- `src/data/mocks/` - MSW handlers for Storybook.
+- `src/state/` - per-instance Zustand vanilla store and provider.
+- `src/design-system/` - app-wide Storybook design-token documentation.
 
 ## Architecture Rules
 
 - Keep Server Components as the default in `src/app`.
 - Push `"use client"` down to the smallest component that needs browser APIs, hooks, or events.
-- Keep `DashboardView` as the composition layer:
+- Keep `Dashboard` as the composition layer:
   - query dashboard data,
   - read/write dashboard UI state,
   - build chart options,
@@ -93,7 +104,7 @@ Vercel is GitHub-backed. Pushes to `main` deploy production.
 
 ## Storybook Rules
 
-- Every reusable dashboard component should have a component-level story under `Dashboard/Components/...`.
+- Every reusable component should have a component-level story under `Components/...`.
 - Keep the full dashboard story as a composed reference, not as the only documentation surface.
 - Expose controls where props are meaningful: labels, values, deltas, statuses, selected project, empty states, and option-like component states.
 - Use the installed design-token Storybook addon for token docs. Do not hand-roll custom token boards.
@@ -124,16 +135,16 @@ Vercel is GitHub-backed. Pushes to `main` deploy production.
 
 ### Add or change a dashboard component
 
-1. Add or update the focused component file in `src/features/dashboard/components/`.
+1. Add or update the focused component file in the matching folder under `src/components/`.
 2. Add or update behavior tests if behavior changes.
 3. Add or update a component-level Storybook story.
-4. Compose it from `DashboardView` only after the component is independently understandable.
+4. Compose it from `Dashboard` only after the component is independently understandable.
 
 ### Add chart behavior
 
-1. Add or update pure option-builder logic in `src/features/dashboard/charts/`.
+1. Add or update pure option-builder logic in the named chart folder under `src/components/`.
 2. Test the option builder.
-3. Wire the option into `EChart` from a client component.
+3. Wire the option into the named chart component that uses the internal `EChart` adapter from `src/lib/echarts/`.
 
 ### Prepare to ship
 
