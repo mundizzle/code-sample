@@ -1,6 +1,6 @@
 import type { EChartsOption } from "echarts";
 
-import type { Project, Risk, WeeklyMetric } from "../types";
+import type { Risk, WeeklyMetric } from "../types";
 import { riskLevels } from "../types";
 import {
   buildHealthTrendSeries,
@@ -97,59 +97,6 @@ export function buildRiskDistributionOption(
       },
     ],
   };
-}
-
-export function buildBudgetTimelineOption(
-  projects: Project[],
-  palette: ChartPalette,
-): EChartsOption {
-  return {
-    color: [palette.series[0], palette.series[1]],
-    grid: { left: 8, right: 16, top: 28, bottom: 8, containLabel: true },
-    legend: {
-      top: 0,
-      icon: "circle",
-      textStyle: { color: palette.textMuted },
-    },
-    tooltip: { trigger: "axis", valueFormatter: formatPercent },
-    xAxis: {
-      type: "value",
-      max: 100,
-      axisLabel: { color: palette.textMuted, formatter: "{value}%" },
-      splitLine: { lineStyle: { color: palette.surfaceElevated } },
-    },
-    yAxis: {
-      type: "category",
-      data: projects.map((project) => project.name),
-      axisLine: { lineStyle: { color: palette.border } },
-      axisLabel: { color: palette.textMuted, width: 116, overflow: "truncate" },
-      axisTick: { show: false },
-    },
-    series: [
-      {
-        name: "Budget used",
-        type: "bar",
-        barMaxWidth: 14,
-        data: projects.map((project) =>
-          Math.round((project.spentUsd / project.budgetUsd) * 100),
-        ),
-      },
-      {
-        name: "Timeline used",
-        type: "bar",
-        barMaxWidth: 14,
-        data: projects.map(calculateTimelineUsedPercent),
-      },
-    ],
-  };
-}
-
-function calculateTimelineUsedPercent(project: Project): number {
-  const start = Date.parse(`${project.startDate}T00:00:00Z`);
-  const end = Date.parse(`${project.targetLaunchDate}T00:00:00Z`);
-  const today = Date.parse("2026-05-01T00:00:00Z");
-
-  return Math.round(((today - start) / (end - start)) * 100);
 }
 
 function formatPercent(value: unknown): string {

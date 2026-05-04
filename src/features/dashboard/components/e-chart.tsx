@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { BarChart, LineChart, PieChart } from "echarts/charts";
+import { LineChart, PieChart } from "echarts/charts";
 import {
   GridComponent,
   LegendComponent,
@@ -16,7 +16,6 @@ import type { EChartsOption } from "echarts";
 import { CanvasRenderer } from "echarts/renderers";
 
 registerEChartsModules([
-  BarChart,
   GridComponent,
   LegendComponent,
   LineChart,

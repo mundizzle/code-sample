@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { dashboardData } from "../data/fixtures";
 import {
-  buildBudgetTimelineOption,
   buildHealthTrendOption,
   buildRiskDistributionOption,
   dashboardChartPalette,
@@ -38,33 +37,6 @@ describe("dashboard chart options", () => {
           { name: "High", value: 3 },
           { name: "Critical", value: 1 },
         ],
-      },
-    ]);
-  });
-
-  it("builds a budget versus timeline comparison with stable series names", () => {
-    const option = buildBudgetTimelineOption(dashboardData.projects, dashboardChartPalette);
-
-    expect(option.yAxis).toMatchObject({
-      type: "category",
-      data: [
-        "Resident Services Hub",
-        "Care Pathways",
-        "Marketplace Refresh",
-        "Grant Eligibility Portal",
-        "Loyalty Insights",
-      ],
-    });
-    expect(option.series).toMatchObject([
-      {
-        name: "Budget used",
-        type: "bar",
-        data: [78, 56, 83, 70, 55],
-      },
-      {
-        name: "Timeline used",
-        type: "bar",
-        data: [81, 71, 84, 49, 61],
       },
     ]);
   });
