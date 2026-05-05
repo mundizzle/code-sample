@@ -1,13 +1,14 @@
 # Design Tokens
 
-This is the design source of truth represented as Figma-style token exports. The app uses these files to produce the Tailwind-facing CSS variables that drive color, chart series colors, radius, and spacing.
+This is the checked-in design input represented as Figma-style token exports. The app uses these JSON files to produce generated CSS variables for Tailwind and generated token documentation for Storybook.
 
 Use this directory when changing foundational visual decisions. Components should consume the generated `ad-*` utilities, not values copied from these JSON files.
 
 - `light.tokens.json` defines the default appearance.
 - `dark.tokens.json` defines the `prefers-color-scheme: dark` overrides.
 - `scripts/generate-tailwind-theme.mjs` flattens the `ad/*` namespace.
-- The generated output lands in `src/app/theme.css`.
+- Generated output lands in `src/app/theme.css` and `src/design-system/design-tokens.tokens.css`.
+- Generated CSS is ignored by git and recreated by npm workflow hooks.
 - Run `npm run generate-tailwind-theme` after token changes.
 - Keep token names semantic and product-oriented: background, surface, text, border, accent, status, chart series.
 

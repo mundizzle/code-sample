@@ -16,6 +16,8 @@
 # next.js
 /.next/
 /out/
+/src/app/theme.css
+/src/design-system/design-tokens.tokens.css
 
 # production
 /build

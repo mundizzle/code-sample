@@ -3,18 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run generate-tailwind-theme",
     "dev": "next dev",
     "skills:install": "npx skills experimental_install",
-    "prebuild": "npm run generate-tailwind-theme && npm run build-storybook:public",
+    "pretest": "npm run generate-tailwind-theme",
+    "pretest:watch": "npm run generate-tailwind-theme",
+    "prestorybook": "npm run generate-tailwind-theme",
+    "prebuild-storybook": "npm run generate-tailwind-theme",
+    "prebuild-storybook:public": "npm run generate-tailwind-theme",
+    "prebuild": "npm run build-storybook:public",
     "build": "next build",
     "generate-tailwind-theme": "node scripts/generate-tailwind-theme.mjs",
     "start": "next start",
     "lint": "eslint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build-storybook:public": "node scripts/build-storybook-public.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "build-storybook:public": "node scripts/build-storybook-public.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.6",

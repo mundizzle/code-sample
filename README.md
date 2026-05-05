@@ -25,9 +25,9 @@ This is a reference implementation for how I approach a modern front-end workflo
 
 What a demo like this cannot simulate is the upfront planning required to align stakeholders across client, product, design, and dev. In my experience, that's one of the biggest keys to success for any project.
 
-That said, I try to carry that same idea into the design-to-dev workflow, where the output is actually created. The through is driven by design tokens: a shared language that can be used natively by designers, developers, design tools, and code.
+That said, I try to carry that same idea into the design-to-dev workflow, where the output is actually created. The through-line is driven by design tokens: a shared language that can be used natively by designers, developers, design tools, and code.
 
-In this example, Figma holds the source of truth for the design values expressed in tokens. They are exported from Figma and translated directly into Tailwind CSS variables without a manual handoff. Updates to design in Figma cascade through to live code by re-exporting and regenerating the theme. Even that process can be automated for a real project.
+In this example, Figma holds the source of truth for the design values expressed in tokens. The exported token JSON is checked in under `design-tokens/`, then translated into generated CSS for the app theme and Storybook token docs. Updates to design in Figma cascade through to live code by re-exporting and regenerating the theme. Even that process can be automated for a real project.
 
 ```mermaid
 flowchart LR
@@ -86,7 +86,12 @@ Open http://localhost:6006.
 npm run generate-tailwind-theme
 ```
 
-This reads `design-tokens/*.tokens.json` and rewrites `src/app/theme.css`.
+This reads the checked-in Figma token exports in `design-tokens/*.tokens.json` and rewrites ignored generated CSS files used by the app and Storybook:
+
+- `src/app/theme.css`
+- `src/design-system/design-tokens.tokens.css`
+
+The same generation step runs automatically before `dev`, `test`, `test:watch`, `storybook`, `build-storybook`, `build-storybook:public`, and `build`.
 
 ## Validate and Build
 
