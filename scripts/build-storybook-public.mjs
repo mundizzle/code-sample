@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 
 const tempDir = ".tmp-storybook-public";
 const publicDir = "public/storybook";
-const defaultStoryPath = "/story/dashboard--default";
+const defaultStoryPath = "/story/views-dashboard--default";
 
 if (process.env.SKIP_STORYBOOK_BUILD === "1") {
   console.log("Skipping Storybook public build.");

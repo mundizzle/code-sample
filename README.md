@@ -7,11 +7,33 @@ The goal is not to show every possible feature. It is to show a front-end archit
 ## Key Links
 
 - [Live application](https://code-sample-three.vercel.app)
-- [Storybook design system](https://code-sample-three.vercel.app/storybook)
+- [Storybook design system](https://code-sample-three.vercel.app/storybook?path=/story/views-dashboard--default)
 - [Figma reference](https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3)
 - [Source code](https://github.com/mundizzle/code-sample)
 
 ![Desktop dashboard view](.github/readme-assets/dashboard-desktop.png)
+
+## Workflow Overview
+
+The through-line is design-to-dev continuity. Figma-style tokens are committed as JSON, generated into Tailwind-ready CSS variables, consumed by the React dashboard, documented in Storybook, and shipped through the same Vercel deployment path.
+
+```mermaid
+flowchart LR
+  figma["Figma Variables"]
+  tokens["Token JSON<br/>design-tokens/*.tokens.json"]
+  theme["Generated Tailwind theme<br/>src/app/theme.css"]
+  ui["Semantic Tailwind utilities<br/>ad-*"]
+  app["Responsive React dashboard"]
+  storybook["Storybook component system"]
+  deploy["Vercel deployment"]
+
+  figma --> tokens --> theme --> ui --> app
+  ui --> storybook
+  app --> deploy
+  storybook --> deploy
+```
+
+The subfolder READMEs explain the pieces in more detail. The root README is meant to give the quick mental model first: one connected workflow from design source, to implementation, to review surface, to deployment.
 
 ## What To Look For
 
