@@ -11,19 +11,9 @@ Use this directory for small infrastructure adapters that keep browser-only or t
 - Keep chart option builders in component folders so they stay easy to test without rendering ECharts.
 - Avoid putting domain rules or dashboard copy in this folder.
 
-## Example
+## Standards
 
-```ts
-const cssVariableNames = {
-  text: "--ad-color-text",
-  textMuted: "--ad-color-text-muted",
-  border: "--ad-color-border",
-  surfaceElevated: "--ad-color-surface-elevated",
-  series: [
-    "--ad-chart-series-1",
-    "--ad-chart-series-2",
-    "--ad-chart-series-3",
-    "--ad-chart-series-4",
-  ],
-} as const;
-```
+- Prefer thin adapters around third-party runtime behavior.
+- Prefer registering only the ECharts modules the dashboard actually uses.
+- Prefer reading visual values from generated CSS variables instead of duplicating token values in TypeScript.
+- Avoid mixing adapter code with chart option construction, dashboard data rules, or product copy.

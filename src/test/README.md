@@ -10,16 +10,9 @@ Use this directory for test environment setup and shared test utilities. Individ
 - Dashboard tests should verify visible behavior and guard against implementation commentary leaking into product UI.
 - Prefer behavior assertions over snapshots unless a snapshot adds clear review value.
 
-## Example
+## Standards
 
-```ts
-import { describe, expect, it } from "vitest";
-
-describe("filterProjects", () => {
-  it("filters by client, status, health, and search text", () => {
-    expect(results.map((project) => project.name)).toEqual([
-      "Resident Services Hub",
-    ]);
-  });
-});
-```
+- Prefer tests that read like user or domain behavior, not implementation wiring.
+- Prefer direct model/store tests for pure logic and React Testing Library for rendered interactions.
+- Prefer accessibility queries such as roles, labels, and visible text for UI tests.
+- Avoid brittle snapshots, CSS-class assertions, or tests that depend on Storybook-only setup.

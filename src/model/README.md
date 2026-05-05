@@ -10,17 +10,9 @@ Use this directory for code that should be understandable and testable without R
 - Keep functions pure where practical and test them directly.
 - Do not import React components, Zustand stores, or browser-only libraries here.
 
-## Example
+## Standards
 
-```ts
-const results = filterProjects(dashboardData.projects, {
-  clientIds: ["client-civicworks"],
-  statuses: ["launching"],
-  healthStatuses: ["watch"],
-  search: "resident",
-});
-
-expect(results.map((project) => project.name)).toEqual([
-  "Resident Services Hub",
-]);
-```
+- Prefer functions that take explicit inputs and return derived values without mutating the caller's data.
+- Prefer centralized labels and formatters when the same wording or display shape appears in more than one component.
+- Prefer tests that describe business behavior: filtered project sets, KPI calculations, risk summaries, and chart-ready series.
+- Avoid reaching into Zustand, React Query, browser APIs, or fixture files from deep inside model helpers.

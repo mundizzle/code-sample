@@ -17,8 +17,8 @@ import { DashboardHeader } from "./components/header/header";
 import { FilterPanel } from "./components/filters/filter-panel";
 import { HealthTrendChart } from "./components/health-trend-chart/health-trend-chart";
 import { MetricCard } from "./components/metrics/metric-card";
-import { ProjectDetailPanel } from "./components/selected-project/project-detail-panel";
-import { ProjectList } from "./components/projects/project-list";
+import { ProjectDetailPanel } from "./components/project-detail-panel/project-detail-panel";
+import { ProjectList } from "./components/project-list/project-list";
 import { RiskDistributionChart } from "./components/risk-distribution-chart/risk-distribution-chart";
 
 export function Dashboard() {

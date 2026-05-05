@@ -1,5 +1,5 @@
 import type { Client, Project } from "../../model/types";
-import { StatusBadge } from "./status-badge";
+import { StatusBadge } from "../status-badge/status-badge";
 
 export type ProjectListProps = {
   clients: Client[];

@@ -10,7 +10,7 @@ const projectOptionLabels = Object.fromEntries(
 );
 
 const meta = {
-  title: "Components/Projects/Project List",
+  title: "Components/Project List",
   component: ProjectList,
   parameters: {
     layout: "centered",

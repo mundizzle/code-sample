@@ -10,10 +10,9 @@ Use this directory for Storybook-facing design system documentation, not product
 - The production app still consumes generated variables from `src/app/theme.css`.
 - Include interface colors and chart series colors together because both are part of the dashboard visual system.
 
-## Example
+## Standards
 
-```tsx
-export const Colors: Story = {
-  render: () => <TokenDocBlock categoryName="Colors" viewType="card" />,
-};
-```
+- Prefer documentation generated from the same variables the app consumes.
+- Prefer Storybook docs that help reviewers inspect decisions quickly: colors, chart colors, radius, and spacing.
+- Prefer concise docs stories over standalone explanation pages that can drift from the implementation.
+- Avoid documenting token values manually in Markdown when the value can be read from generated CSS.

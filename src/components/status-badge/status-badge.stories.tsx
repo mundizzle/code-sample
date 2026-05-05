@@ -4,7 +4,7 @@ import { projectStatuses } from "../../model/types";
 import { StatusBadge } from "./status-badge";
 
 const meta = {
-  title: "Components/Projects/Status Badge",
+  title: "Components/Status Badge",
   component: StatusBadge,
   parameters: {
     layout: "centered",

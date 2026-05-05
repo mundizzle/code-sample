@@ -12,15 +12,9 @@ Use this directory for Storybook configuration. Stories should stay beside the c
 - Keep the navigation organized for browsing: Design System, Views, then Components.
 - Use MSW for realistic dashboard data in stories without adding backend scope.
 
-## Example
+## Standards
 
-```ts
-withThemeByDataAttribute({
-  themes: {
-    Light: "light",
-    Dark: "dark",
-  },
-  defaultTheme: "Light",
-  attributeName: "data-storybook-theme",
-});
-```
+- Prefer stories that show meaningful states a reviewer would inspect: default, empty, filtered, selected, loading, or error states.
+- Prefer story titles that match component folder names.
+- Prefer MSW-backed data for composed views so stories exercise realistic boundaries.
+- Avoid stories that explain implementation details in visible UI or require a running Next.js route.

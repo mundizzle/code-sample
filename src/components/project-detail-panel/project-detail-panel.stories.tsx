@@ -17,7 +17,7 @@ const projectOptionMapping = Object.fromEntries([
 ]);
 
 const meta = {
-  title: "Components/Selected Project/Detail Panel",
+  title: "Components/Project Detail Panel",
   component: ProjectDetailPanel,
   parameters: {
     layout: "centered",

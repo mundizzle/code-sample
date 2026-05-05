@@ -11,17 +11,9 @@ Use this directory for small project automation that needs to be repeatable and 
 - Keep generated files out of version control unless the project intentionally treats them as source.
 - Prefer deterministic output over manual copy/paste steps.
 
-## Example
+## Standards
 
-```js
-function cssVarName(tokenName) {
-  return `--${namespace}-${tokenName.replaceAll("/", "-")}`;
-}
-
-function utilityName(tokenName) {
-  return tokenName
-    .replace(/^color\//, "")
-    .replace(/^chart\//, "chart-")
-    .replaceAll("/", "-");
-}
-```
+- Prefer scripts with explicit inputs, explicit outputs, and stable formatting.
+- Prefer failing with a clear error when required token files or build artifacts are missing.
+- Prefer using structured JSON parsing for token files instead of line-based string manipulation.
+- Avoid scripts that depend on local machine state, hidden credentials, or manual cleanup.

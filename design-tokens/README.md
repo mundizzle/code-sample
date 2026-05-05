@@ -11,24 +11,9 @@ Use this directory when changing foundational visual decisions. Components shoul
 - Run `npm run generate-tailwind-theme` after token changes.
 - Keep token names semantic and product-oriented: background, surface, text, border, accent, status, chart series.
 
-## Example
+## Standards
 
-```json
-{
-  "ad": {
-    "color": {
-      "bg": {
-        "$type": "color",
-        "$value": { "hex": "#F6F7FB" }
-      }
-    }
-  }
-}
-```
-
-That becomes a CSS variable and Tailwind utility path:
-
-```css
---ad-color-bg: #F6F7FB;
---color-ad-bg: var(--ad-color-bg);
-```
+- Prefer token names that describe intent, such as `color/surface` or `chart/series-1`, instead of one-off component names.
+- Prefer changing token values here and regenerating the theme over patching component classes.
+- Prefer keeping light and dark values parallel so contrast changes are easy to audit.
+- Avoid raw colors in components, generated CSS edits by hand, or token names tied to a single temporary layout.

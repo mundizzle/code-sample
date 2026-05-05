@@ -10,14 +10,9 @@ Use this directory for client-side data access patterns and mocks. The goal is t
 - Keep fixture data deterministic so tests, Storybook, and screenshots have a stable baseline.
 - Keep dashboard UI state in `src/state`, not in this folder.
 
-## Example
+## Standards
 
-```ts
-export function dashboardDataQueryOptions() {
-  return queryOptions({
-    queryKey: dashboardKeys.data(),
-    queryFn: getDashboardData,
-    staleTime: 60_000,
-  });
-}
-```
+- Prefer query option helpers and stable query keys over ad hoc `useQuery` configuration scattered through components.
+- Prefer MSW handlers that return the same shape as the Next.js route.
+- Prefer deterministic fixtures over randomized data, dates, or timers.
+- Avoid adding real backend concerns here: auth, persistence, mutations, or environment-specific API clients.

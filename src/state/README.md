@@ -11,15 +11,9 @@ Use this directory for UI-only state. Server/data state belongs in TanStack Quer
 - Store actions should copy caller-owned arrays and objects before saving them.
 - Test state transitions without rendering the full dashboard when possible.
 
-## Example
+## Standards
 
-```ts
-toggleClientFilter: (clientId) =>
-  set((state) => {
-    const clientIds = state.filters.clientIds.includes(clientId)
-      ? state.filters.clientIds.filter((id) => id !== clientId)
-      : [...state.filters.clientIds, clientId];
-
-    return { filters: { ...state.filters, clientIds } };
-  });
-```
+- Prefer small actions that describe user intent, such as toggling a filter or selecting a project.
+- Prefer copying arrays and objects before storing them so callers cannot mutate state after the fact.
+- Prefer selectors that read only the state a component needs.
+- Avoid storing fetched dashboard data, derived KPI values, or business calculations here.
