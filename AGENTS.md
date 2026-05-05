@@ -1,185 +1,74 @@
 # Agency Delivery Dashboard Agent Guide
 
-## What This Repo Demonstrates
-
-This is a Senior FED code sample packaged as a modern UI architecture demo. The public README tells the human-facing story; this file tells agents how to preserve and extend that story without turning the repo into a grab bag.
-
-The core demonstration is design-to-dev continuity:
+This repo is a Senior FED code sample. Preserve the story: a concise, conventional dashboard that demonstrates design-to-dev continuity from Figma, to tokens, to Tailwind, to the live app.
 
 ```mermaid
 flowchart LR
-  figma["Figma Variables"]
-  tokens["Token JSON<br/>design-tokens/*.tokens.json"]
-  theme["Generated Tailwind theme<br/>src/app/theme.css"]
-  ui["Semantic Tailwind utilities<br/>ad-*"]
-  app["Responsive React dashboard"]
-  storybook["Storybook component system"]
-  deploy["Vercel deployment"]
+  figma["Figma"]
+  tokens["Design tokens"]
+  theme["Tailwind theme"]
+  app["Live app"]
 
-  figma --> tokens --> theme --> ui --> app
-  ui --> storybook
-  app --> deploy
-  storybook --> deploy
+  figma --> tokens --> theme --> app
 ```
 
-The project should stay concise, conventional, and easy to explain in an interview. Prefer recognizable Next.js, React, Tailwind, Storybook, and Vercel patterns over clever custom infrastructure.
+## References
 
-## Live References
-
-- Source: https://github.com/mundizzle/code-sample
 - App: https://code-sample-three.vercel.app
 - Storybook: https://code-sample-three.vercel.app/storybook
 - Figma: https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3
+- Source: https://github.com/mundizzle/code-sample
 
 Vercel is GitHub-backed. Pushes to `main` deploy production.
 
-## Primary Constraints
+## Guardrails
 
-- Do not add visible product UI copy that explains the implementation, tooling, design tokens, Figma, Storybook, Zustand, ECharts, or that this is a code sample.
+- Keep the app easy to inspect and explain in an interview.
+- Do not add visible product UI copy about implementation, tooling, Figma, tokens, Storybook, Zustand, ECharts, or the fact that this is a code sample.
+- Do not add backend/auth/persistence/product scope unless explicitly asked.
 - Do not add an in-app theme switcher. Appearance follows `prefers-color-scheme`.
-- Do not commit generated build output such as `public/storybook`, `.tmp-storybook-public`, `storybook-static`, `.next`, or local tool folders.
-- Do not add a real backend, auth, persistence, or unrelated product scope unless the user explicitly asks.
-- Keep changes small enough that the user can explain them in an interview.
+- Do not commit generated build, Storybook, framework, or local tool output.
+- Prefer existing patterns, named exports, direct imports, colocated prop types, and small focused files.
 
-## Project Map
+## Principles
 
-- `README.md` - public project narrative and reviewer-facing workflow.
-- `design-tokens/` - token JSON that represents exported Figma variables.
-- `scripts/generate-tailwind-theme.mjs` - token JSON to `src/app/theme.css`.
-- `scripts/build-storybook-public.mjs` - static Storybook build for `/storybook` on Vercel.
-- `src/app/` - Next.js App Router shell, metadata, providers, and global CSS.
-- `src/app/api/dashboard/` - mock dashboard API route, route test, and JSON response payload.
-- `src/dashboard.tsx` - app dashboard screen composition.
-- `src/dashboard.test.tsx` - composed dashboard behavior test.
-- `src/dashboard.stories.tsx` - composed dashboard Storybook reference.
-- `src/components/header/` - dashboard header component.
-- `src/components/filters/` - client filter panel.
-- `src/components/metrics/` - KPI metric cards.
-- `src/components/chart-panel/` - reusable chart panel shell.
-- `src/components/health-trend-chart/` - health trend chart component, option builder, test, and story.
-- `src/components/risk-distribution-chart/` - risk distribution chart component, option builder, test, and story.
-- `src/lib/echarts/` - internal ECharts adapter, palette fallback, and token palette hook.
-- `src/components/projects/` - project list and status badge.
-- `src/components/selected-project/` - selected project detail panel.
-- `src/model/` - app domain types, labels, formatters, and pure filtering/aggregation utilities.
-- `src/data/query/` - TanStack Query boundary for `/api/dashboard`.
-- `src/data/mocks/` - MSW handlers for Storybook.
-- `src/state/` - per-instance Zustand vanilla store and provider.
-- `src/design-system/` - app-wide Storybook design-token documentation.
+- Keep the root README human-facing. It should explain purpose, not become an implementation inventory.
+- Keep implementation details discoverable in code, tests, and Storybook rather than over-explaining them in product UI.
+- Prefer clear separation of concerns: server/data state, UI-only state, pure domain logic, chart configuration, and presentation should remain easy to trace.
+- Keep browser-only behavior isolated behind small client boundaries.
+- Keep chart option builders pure and tested. The rendering adapter owns browser-only lifecycle and resize behavior.
+- Prefer semantic token-backed styling for colors and radii; use raw Tailwind for layout mechanics.
+- Preserve responsive behavior, semantic HTML, keyboard-operable controls, useful chart labels, and document-level accessibility.
 
-## Architecture Rules
+## Design Tokens
 
-- Keep Server Components as the default in `src/app`.
-- Push `"use client"` down to the smallest component that needs browser APIs, hooks, or events.
-- Keep `Dashboard` as the composition layer:
-  - query dashboard data,
-  - read/write dashboard UI state,
-  - build chart options,
-  - compose sections.
-- Keep presentational UI in focused component files.
-- Use named exports.
-- Keep prop types colocated with components. Export them only when another component or Storybook needs them.
-- Avoid barrel files in this feature; direct imports keep the code sample easy to trace.
-- Keep TanStack Query responsible for data/server-state boundaries.
-- Keep Zustand responsible for UI-only state.
-- Copy caller-owned arrays and objects before storing them in Zustand.
-- Keep chart option builders pure and tested. `EChart` owns browser-only lifecycle and resize behavior.
+- Figma is the source of truth for design values. If a token changes, update both Figma and the repo token source, then regenerate the app theme.
+- Keep token JSON internally consistent, including color `components` and `hex`.
+- Treat app/Figma drift as a decision to resolve, not something to leave silently.
+- Treat Lighthouse contrast failures as token or semantic-utility issues first. Keep `text-muted` legible on elevated surfaces.
 
-## Styling Rules
-
-- Prefer semantic `ad-*` Tailwind utilities from generated tokens:
-  - `bg-ad-bg`
-  - `bg-ad-surface`
-  - `bg-ad-surface-elevated`
-  - `text-ad-text`
-  - `text-ad-text-muted`
-  - `border-ad-border`
-  - `bg-ad-accent`
-  - `rounded-ad-sm`, `rounded-ad-md`, `rounded-ad-lg`
-- Use raw Tailwind values for layout mechanics, grid tracks, responsive breakpoints, sizing, and one-off values not represented by tokens.
-- Preserve mobile-first responsive behavior.
-- Preserve the `ProjectDetailPanel` container-query example.
-- Use semantic HTML and accessible controls: headings, landmarks, buttons, `aria-pressed` for toggle chips, useful `aria-label` values for charts, and keyboard-operable interactions.
-- If app and Figma drift, intentionally choose which artifact should move, then align the other. Do not silently let them diverge.
-
-## Storybook Rules
-
-- Every reusable component should have a component-level story under `Components/...`.
-- Keep the full dashboard story as a composed reference, not as the only documentation surface.
-- Expose controls where props are meaningful: labels, values, deltas, statuses, selected project, empty states, and option-like component states.
-- Use the installed design-token Storybook addon for token docs. Do not hand-roll custom token boards.
-- `npm run build` builds static Storybook into `public/storybook` through `prebuild`; keep that output ignored.
-
-## Testing Rules
+## Tests And Storybook
 
 - Use TDD for behavior changes when practical.
 - Prefer behavior tests over snapshots.
-- Keep pure utility tests focused and readable.
-- Cover important UI behavior with React Testing Library:
-  - dashboard content renders,
-  - implementation commentary stays out of the product UI,
-  - client filters work,
-  - selected project details update,
-  - responsive class expectations remain intentional,
-  - the container-query example remains present.
+- Add or update component-level Storybook stories for reusable components.
 - Storybook is documentation and review surface; it does not replace tests.
 
-## Common Change Recipes
+## Validation
 
-### Change a design token
-
-1. Update the relevant token file in `design-tokens/`.
-2. Run `npm run generate-tailwind-theme`.
-3. Use generated semantic utilities in app or Storybook code.
-4. Run validation.
-
-### Add or change a dashboard component
-
-1. Add or update the focused component file in the matching folder under `src/components/`.
-2. Add or update behavior tests if behavior changes.
-3. Add or update a component-level Storybook story.
-4. Compose it from `Dashboard` only after the component is independently understandable.
-
-### Add chart behavior
-
-1. Add or update pure option-builder logic in the named chart folder under `src/components/`.
-2. Test the option builder.
-3. Wire the option into the named chart component that uses the internal `EChart` adapter from `src/lib/echarts/`.
-
-### Prepare to ship
-
-1. Run `npm run test`.
-2. Run `npm run lint`.
-3. Run `npm run build`.
-4. Check that generated artifacts remain uncommitted.
-5. Push `main`.
-6. Verify both the app and `/storybook` after Vercel deploys.
-
-## Commands
+Run before handing off meaningful changes:
 
 ```bash
-npm run dev
-npm run storybook
-npm run generate-tailwind-theme
 npm run test
 npm run lint
 npm run build
-npm run build-storybook
-npm run build-storybook:public
 ```
 
-## Required Agent Guidance
+For visual or accessibility-sensitive changes, also run a local production smoke check or Lighthouse pass when practical.
 
-Before application code changes, use the relevant installed skills or official docs:
+## Agent Guidance
 
-- `vercel:nextjs` for App Router, Server/Client Component, and Vercel conventions.
-- `vercel:react-best-practices` after editing multiple TSX files.
-- `vercel:vercel-cli` before deployment, logs, linking, or Vercel project settings.
-- `responsive-design` before responsive layout work.
-- `tailwind-design-system` before token or Tailwind system work.
-- `tanstack-query-best-practices` before query/data-boundary changes.
-
-If a skill is unavailable, use `find-skills` or inspect official docs before proceeding.
+Before application code changes, check the relevant installed skill or current official docs for the framework, deployment, styling, responsiveness, or data-boundary area you are touching.
 
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
