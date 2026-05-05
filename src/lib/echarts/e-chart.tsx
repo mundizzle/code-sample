@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { LineChart, PieChart } from "echarts/charts";
 import {
   GridComponent,
@@ -25,12 +25,19 @@ registerEChartsModules([
 ]);
 
 type EChartProps = {
+  accessibleDescription?: string;
   ariaLabel: string;
   className?: string;
   option: EChartsOption;
 };
 
-export function EChart({ ariaLabel, className = "h-56 w-full", option }: EChartProps) {
+export function EChart({
+  accessibleDescription,
+  ariaLabel,
+  className = "h-56 w-full",
+  option,
+}: EChartProps) {
+  const descriptionId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ECharts | null>(null);
 
@@ -59,11 +66,19 @@ export function EChart({ ariaLabel, className = "h-56 w-full", option }: EChartP
   }, [option]);
 
   return (
-    <div
-      ref={containerRef}
-      role="img"
-      aria-label={ariaLabel}
-      className={className}
-    />
+    <>
+      <div
+        ref={containerRef}
+        role="img"
+        aria-describedby={accessibleDescription ? descriptionId : undefined}
+        aria-label={ariaLabel}
+        className={className}
+      />
+      {accessibleDescription ? (
+        <p id={descriptionId} className="sr-only">
+          {accessibleDescription}
+        </p>
+      ) : null}
+    </>
   );
 }

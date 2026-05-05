@@ -54,6 +54,16 @@ flowchart LR
 npm install
 ```
 
+### Restore Agent Skills
+
+This repo locks project-local skills for future code review and implementation work in `skills-lock.json`. Restore the local skill files after installing dependencies:
+
+```bash
+npm run skills:install
+```
+
+The restored skills are written to `.agents/skills`, which is ignored by git. They cover Next.js App Router practices, Vercel React performance guidance, component composition patterns, and accessible component building. Restart Codex or start a fresh agent session after restoring them.
+
 ### Run the App
 
 ```bash

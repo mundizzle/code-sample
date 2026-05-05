@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
 
 import { dashboardDataQueryOptions } from "./data/query/dashboard-query";
@@ -13,13 +14,33 @@ import {
   sortProjects,
 } from "./model/dashboard-utils";
 import { ChartPanel } from "./components/chart-panel/chart-panel";
-import { DashboardHeader } from "./components/header/header";
-import { FilterPanel } from "./components/filters/filter-panel";
-import { HealthTrendChart } from "./components/health-trend-chart/health-trend-chart";
-import { MetricCard } from "./components/metrics/metric-card";
+import { DashboardHeader } from "./components/dashboard-header/dashboard-header";
+import { FilterPanel } from "./components/filter-panel/filter-panel";
+import { MetricCard } from "./components/metric-card/metric-card";
 import { ProjectDetailPanel } from "./components/project-detail-panel/project-detail-panel";
 import { ProjectList } from "./components/project-list/project-list";
-import { RiskDistributionChart } from "./components/risk-distribution-chart/risk-distribution-chart";
+
+const HealthTrendChart = dynamic(
+  () =>
+    import("./components/health-trend-chart/health-trend-chart").then(
+      (module) => module.HealthTrendChart,
+    ),
+  {
+    ssr: false,
+    loading: () => <ChartLoading label="Loading health trend chart..." />,
+  },
+);
+
+const RiskDistributionChart = dynamic(
+  () =>
+    import("./components/risk-distribution-chart/risk-distribution-chart").then(
+      (module) => module.RiskDistributionChart,
+    ),
+  {
+    ssr: false,
+    loading: () => <ChartLoading label="Loading risk distribution chart..." />,
+  },
+);
 
 export function Dashboard() {
   const {
@@ -186,3 +207,14 @@ const emptyDashboardData: DashboardData = {
   weeklyMetrics: [],
   teamAllocations: [],
 };
+
+function ChartLoading({ label }: { label: string }) {
+  return (
+    <div
+      role="status"
+      className="grid h-56 w-full place-items-center rounded-ad-sm border border-dashed border-ad-border bg-ad-bg text-sm text-ad-text-muted"
+    >
+      {label}
+    </div>
+  );
+}

@@ -42,3 +42,14 @@ export function buildRiskDistributionOption(
     ],
   };
 }
+
+export function buildRiskDistributionAccessibleDescription(risks: Risk[]): string {
+  const summary = buildRiskSummary(risks);
+  const values = riskLevels.map((level) => {
+    const label = riskLevelLabels[level];
+
+    return `${label} ${summary.byLevel[level]}`;
+  });
+
+  return `Open risks by severity: ${values.join(", ")}. Total open risks: ${summary.totalOpen}.`;
+}

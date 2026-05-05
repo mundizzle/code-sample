@@ -50,12 +50,8 @@ describe("Dashboard", () => {
     expect(screen.getByText("Launches")).toBeInTheDocument();
     expect(screen.getByText("Health Trend")).toBeInTheDocument();
     expect(screen.getByText("Risk Distribution")).toBeInTheDocument();
-    expect(
-      screen.getByRole("img", { name: "Weekly delivery health scores" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("img", { name: "Open risk distribution by severity" }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Loading health trend chart...")).toBeInTheDocument();
+    expect(screen.getByText("Loading risk distribution chart...")).toBeInTheDocument();
     expect(screen.queryByText("Budget vs Timeline")).not.toBeInTheDocument();
     expect(await screen.findAllByText("Resident Services Hub")).toHaveLength(2);
     expect(screen.getByText("Selected Project")).toBeInTheDocument();

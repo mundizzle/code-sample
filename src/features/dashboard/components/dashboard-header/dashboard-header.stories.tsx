@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { DashboardHeader } from "./header";
+import { DashboardHeader } from "./dashboard-header";
 
 const meta = {
-  title: "Components/Header",
+  title: "Components/Dashboard Header",
   component: DashboardHeader,
   parameters: {
     layout: "centered",

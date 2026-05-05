@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs";
 import { MetricCard } from "./metric-card";
 
 const meta = {
-  title: "Components/Metrics/Metric Card",
+  title: "Components/Metric Card",
   component: MetricCard,
   parameters: {
     layout: "centered",

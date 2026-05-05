@@ -38,9 +38,9 @@ const preview: Preview = {
           ["Dashboard"],
           "Components",
           [
-            "Header",
-            "Filters",
-            "Metrics",
+            "Dashboard Header",
+            "Filter Panel",
+            "Metric Card",
             "Chart Panel",
             "Health Trend Chart",
             "Risk Distribution Chart",

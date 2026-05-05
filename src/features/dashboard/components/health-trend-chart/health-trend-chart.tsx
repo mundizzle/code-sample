@@ -5,7 +5,10 @@ import type { WeeklyMetric } from "../../model/types";
 import { EChart } from "@/lib/echarts/e-chart";
 import { useChartPalette } from "@/lib/echarts/use-chart-palette";
 
-import { buildHealthTrendOption } from "./health-trend-options";
+import {
+  buildHealthTrendAccessibleDescription,
+  buildHealthTrendOption,
+} from "./health-trend-options";
 
 export type HealthTrendChartProps = {
   metrics: WeeklyMetric[];
@@ -16,6 +19,7 @@ export function HealthTrendChart({ metrics }: HealthTrendChartProps) {
 
   return (
     <EChart
+      accessibleDescription={buildHealthTrendAccessibleDescription(metrics)}
       ariaLabel="Weekly delivery health scores"
       option={buildHealthTrendOption(metrics, chartPalette)}
     />

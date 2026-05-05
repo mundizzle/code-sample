@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "skills:install": "npx skills experimental_install",
     "prebuild": "npm run generate-tailwind-theme && npm run build-storybook:public",
     "build": "next build",
     "generate-tailwind-theme": "node scripts/generate-tailwind-theme.mjs",

@@ -1,12 +1,12 @@
 # Components
 
-These are the visible dashboard building blocks: header, filters, metrics, charts, project list, and selected project detail. The folder is organized by what each component represents, not by a generic catch-all bucket.
+These are the visible dashboard building blocks: header, filter panel, metric cards, charts, project list, and selected project detail. The folder is organized by component name, not by broad catch-all buckets.
 
 Use this directory for UI components that render dashboard experience. Keep data fetching in `../data`, domain logic in `../model`, and chart runtime wiring in `src/lib`.
 
 - `chart-panel/` provides the reusable shell used around visible charts.
 - `health-trend-chart/` and `risk-distribution-chart/` own their chart components, option builders, tests, and stories.
-- `filters/`, `project-list/`, `project-detail-panel/`, and `status-badge/` handle interactive dashboard controls and detail views.
+- `dashboard-header/`, `filter-panel/`, `metric-card/`, `project-list/`, `project-detail-panel/`, and `status-badge/` handle dashboard controls, summary surfaces, and detail views.
 - Use semantic `ad-*` Tailwind utilities generated from design tokens instead of raw color, radius, or spacing values.
 - Keep component-level Storybook stories beside reusable components under `Components/...`.
 - Keep chart option builders pure and covered by tests in the chart component folder.

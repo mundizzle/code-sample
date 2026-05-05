@@ -27,6 +27,16 @@ Core requirements:
 - Add tests for domain utilities, state behavior, dashboard behavior, data query/API behavior, chart option builders, and important accessibility/token contrast expectations.
 - Do not put visible product UI copy in the app that explains the implementation, tooling, Figma, Storybook, Zustand, ECharts, or that this is a code sample.
 
+Project skills:
+- This repo locks project-local skills in `skills-lock.json`. The generated `.agents/skills` directory is intentionally ignored.
+- Run `npm run skills:install` after installing dependencies to restore the local skill files.
+- Restart Codex or start a fresh agent session after installing or restoring skills.
+- Use these skills when reviewing or generating code:
+  - `next-best-practices` for App Router structure, route handlers, server/client boundaries, data patterns, and build behavior.
+  - `vercel-react-best-practices` for React performance, bundle size, waterfalls, render behavior, and heavy client boundaries.
+  - `vercel-composition-patterns` for component APIs, naming, ownership, provider placement, and composition decisions.
+  - `building-components` for accessible, composable UI components, ARIA behavior, keyboard support, and Storybook coverage.
+
 Include:
 - A human-facing README that explains the project purpose, key links, built-with list, and the design-to-dev workflow.
 - A simplified Mermaid diagram showing: Figma -> Design tokens -> Tailwind theme -> Live app.

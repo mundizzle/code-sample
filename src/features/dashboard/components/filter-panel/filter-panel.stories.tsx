@@ -10,7 +10,7 @@ const clientOptionLabels = Object.fromEntries(
 );
 
 const meta = {
-  title: "Components/Filters/Filter Panel",
+  title: "Components/Filter Panel",
   component: FilterPanel,
   parameters: {
     layout: "centered",

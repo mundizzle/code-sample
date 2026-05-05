@@ -25,7 +25,9 @@
 
 # misc
 .DS_Store
+.agents/
 .claude/
+.augment/
 *.pem
 
 # debug

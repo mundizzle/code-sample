@@ -42,6 +42,19 @@ export function buildHealthTrendOption(
   };
 }
 
+export function buildHealthTrendAccessibleDescription(
+  metrics: WeeklyMetric[],
+): string {
+  const trend = buildHealthTrendSeries(metrics);
+  const values = trend.labels.map((label, index) => {
+    const value = trend.series[0]?.data[index] ?? 0;
+
+    return `${label} ${value}%`;
+  });
+
+  return `Delivery health trend: ${values.join(", ")}.`;
+}
+
 function formatPercent(value: unknown): string {
   const displayValue = Array.isArray(value) ? value[0] : value;
 
