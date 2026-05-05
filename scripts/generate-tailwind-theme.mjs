@@ -3,7 +3,7 @@ import path from "node:path";
 
 const tokenDir = path.join(process.cwd(), "design-tokens");
 const appThemeOutputPath = path.join(process.cwd(), "src/app/theme.css");
-const storybookTokenOutputPath = path.join(process.cwd(), "src/tailwind-theme/tailwind-theme.tokens.css");
+const storybookTokenOutputPath = path.join(process.cwd(), "src/tailwind/theme.tokens.css");
 const modes = ["light", "dark"];
 const namespace = "ad";
 const storybookTokenGroups = [

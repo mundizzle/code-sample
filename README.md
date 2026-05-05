@@ -89,7 +89,7 @@ npm run generate-tailwind-theme
 This reads the checked-in Figma token exports in `design-tokens/*.tokens.json` and rewrites ignored generated CSS files used by the app and Storybook:
 
 - `src/app/theme.css`
-- `src/tailwind-theme/tailwind-theme.tokens.css`
+- `src/tailwind/theme.tokens.css`
 
 The same generation step runs automatically before `dev`, `test`, `test:watch`, `storybook`, `build-storybook`, `build-storybook:public`, and `build`.
 

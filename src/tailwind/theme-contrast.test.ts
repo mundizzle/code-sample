@@ -46,7 +46,7 @@ function contrastRatio(foreground: string, background: string) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-describe("tailwind theme contrast", () => {
+describe("theme contrast", () => {
   it("keeps muted text legible on elevated surfaces", () => {
     const textMuted = readLightColorToken("text-muted");
     const surfaceElevated = readLightColorToken("surface-elevated");
