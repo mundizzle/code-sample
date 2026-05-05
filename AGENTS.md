@@ -1,77 +1,39 @@
-# Agency Delivery Dashboard Agent Guide
+Build a concise Senior Front-End Engineer code sample: a modern agency delivery dashboard that demonstrates design-to-dev continuity from Figma-style design tokens, to generated Tailwind theme variables, to a responsive live app, with Storybook as the component/design-system review surface.
 
-This repo is a Senior FED code sample. Preserve the story: a concise, conventional dashboard that demonstrates design-to-dev continuity from Figma, to tokens, to Tailwind, to the live app.
+The project should feel like a realistic consulting delivery dashboard, not a toy app or a marketing site. The first screen should be the actual dashboard experience.
 
-```mermaid
-flowchart LR
-  figma["Figma"]
-  tokens["Design tokens"]
-  theme["Tailwind theme"]
-  app["Live app"]
+Use:
+- Next.js App Router
+- React
+- Tailwind CSS
+- TypeScript
+- Storybook
+- TanStack Query for server/data state
+- Zustand for UI-only state
+- ECharts for charts
+- Vitest and React Testing Library
 
-  figma --> tokens --> theme --> app
-```
+Core requirements:
+- Keep the implementation conventional, readable, and easy to explain in an interview.
+- Include Figma-style token JSON for colors, radius, spacing, and chart colors.
+- Generate the Tailwind-facing theme CSS from the token JSON.
+- Use semantic token-backed utilities for color/radius styling.
+- Include light/dark support through prefers-color-scheme, but do not add an in-app theme switcher.
+- Build a responsive dashboard with KPI cards, filters, project list, selected project detail panel, and charts.
+- Keep chart option builders pure and tested.
+- Use a mock API route and fixture-backed data, but do not add a real backend, auth, persistence, or unrelated product scope.
+- Add Storybook stories for reusable components and a composed dashboard story.
+- Add design-token documentation in Storybook.
+- Add tests for domain utilities, state behavior, dashboard behavior, data query/API behavior, chart option builders, and important accessibility/token contrast expectations.
+- Do not put visible product UI copy in the app that explains the implementation, tooling, Figma, Storybook, Zustand, ECharts, or that this is a code sample.
 
-## References
+Include:
+- A human-facing README that explains the project purpose, key links, built-with list, and the design-to-dev workflow.
+- A simplified Mermaid diagram showing: Figma -> Design tokens -> Tailwind theme -> Live app.
+- An AGENTS.md guide focused on future-agent principles and guardrails.
+- Validation scripts for test, lint, build, Storybook, and token generation.
 
-- App: https://code-sample-three.vercel.app
-- Storybook: https://code-sample-three.vercel.app/storybook
-- Figma: https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3
-- Source: https://github.com/mundizzle/code-sample
-
-Vercel is GitHub-backed. Pushes to `main` deploy production.
-
-## Guardrails
-
-- Keep the app easy to inspect and explain in an interview.
-- Do not add visible product UI copy about implementation, tooling, Figma, tokens, Storybook, Zustand, ECharts, or the fact that this is a code sample.
-- Do not add backend/auth/persistence/product scope unless explicitly asked.
-- Do not add an in-app theme switcher. Appearance follows `prefers-color-scheme`.
-- Do not commit generated build, Storybook, framework, or local tool output.
-- Prefer existing patterns, named exports, direct imports, colocated prop types, and small focused files.
-
-## Principles
-
-- Keep the root README human-facing. It should explain purpose, not become an implementation inventory.
-- Keep implementation details discoverable in code, tests, and Storybook rather than over-explaining them in product UI.
-- Prefer clear separation of concerns: server/data state, UI-only state, pure domain logic, chart configuration, and presentation should remain easy to trace.
-- Keep browser-only behavior isolated behind small client boundaries.
-- Keep chart option builders pure and tested. The rendering adapter owns browser-only lifecycle and resize behavior.
-- Prefer semantic token-backed styling for colors and radii; use raw Tailwind for layout mechanics.
-- Preserve responsive behavior, semantic HTML, keyboard-operable controls, useful chart labels, and document-level accessibility.
-
-## Design Tokens
-
-- Figma is the source of truth for design values. If a token changes, update both Figma and the repo token source, then regenerate the app theme.
-- Keep token JSON internally consistent, including color `components` and `hex`.
-- Treat app/Figma drift as a decision to resolve, not something to leave silently.
-- Treat Lighthouse contrast failures as token or semantic-utility issues first. Keep `text-muted` legible on elevated surfaces.
-
-## Tests And Storybook
-
-- Use TDD for behavior changes when practical.
-- Prefer behavior tests over snapshots.
-- Add or update component-level Storybook stories for reusable components.
-- Storybook is documentation and review surface; it does not replace tests.
-
-## Validation
-
-Run before handing off meaningful changes:
-
-```bash
-npm run test
-npm run lint
-npm run build
-```
-
-For visual or accessibility-sensitive changes, also run a local production smoke check or Lighthouse pass when practical.
-
-## Agent Guidance
-
-Before application code changes, check the relevant installed skill or current official docs for the framework, deployment, styling, responsiveness, or data-boundary area you are touching.
-
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+Before finishing:
+- Run tests, lint, and production build.
+- Verify generated build artifacts are ignored.
+- Run a local production accessibility smoke check or Lighthouse pass if practical.
