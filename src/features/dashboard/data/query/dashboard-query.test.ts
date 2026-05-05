@@ -7,7 +7,7 @@ import {
   dashboardKeys,
   getDashboardData,
 } from "./dashboard-query";
-import { dashboardData } from "@/app/api/dashboard/mock-data";
+import { dashboardData } from "@/features/dashboard/data/mock-data";
 
 function mockDashboardFetch({
   ok = true,

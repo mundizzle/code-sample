@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createDashboardQueryClient } from "./data/query/dashboard-query";
-import { dashboardData } from "@/app/api/dashboard/mock-data";
+import { dashboardData } from "@/features/dashboard/data/mock-data";
 import { DashboardStoreProvider } from "./state/dashboard-store-provider";
 import { Dashboard } from "./dashboard";
 

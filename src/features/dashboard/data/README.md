@@ -8,7 +8,7 @@ Use this directory for client-side data access patterns and mocks. The goal is t
 - `mocks/mock-handlers.ts` serves dashboard data to Storybook.
 - The app route in `src/app/api/dashboard` returns the same shape used by the query layer.
 - Keep fixture data deterministic so tests, Storybook, and screenshots have a stable baseline.
-- Keep dashboard UI state in `src/state`, not in this folder.
+- Keep dashboard UI state in `../state`, not in this folder.
 
 ## Standards
 

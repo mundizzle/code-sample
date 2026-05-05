@@ -2,7 +2,7 @@
 
 This folder owns local dashboard UI state through a per-instance Zustand vanilla store. It handles selections, filters, date range, chart mode, and mobile detail panel state.
 
-Use this directory for UI-only state. Server/data state belongs in TanStack Query, and domain calculations belong in `src/model`.
+Use this directory for UI-only state. Server/data state belongs in TanStack Query, and domain calculations belong in `../model`.
 
 - `dashboard-store.ts` defines state, actions, defaults, and store creation.
 - `dashboard-store-provider.tsx` exposes the store to React components.

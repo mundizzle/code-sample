@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { dashboardData } from "@/app/api/dashboard/mock-data";
+import { dashboardData } from "@/features/dashboard/data/mock-data";
 import {
   aggregateDashboardMetrics,
   buildDashboardDataSlice,

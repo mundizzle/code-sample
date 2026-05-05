@@ -2,7 +2,7 @@ import type { Preview } from "@storybook/nextjs";
 import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import { initialize, mswLoader } from "msw-storybook-addon";
 
-import { dashboardMockHandlers } from "../src/data/mocks/mock-handlers";
+import { dashboardMockHandlers } from "../src/features/dashboard/data/mocks/mock-handlers";
 import "../src/app/globals.css";
 
 initialize();

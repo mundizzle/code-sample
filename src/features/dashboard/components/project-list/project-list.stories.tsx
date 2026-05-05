@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { fn } from "storybook/test";
 
-import { dashboardData } from "@/app/api/dashboard/mock-data";
+import { dashboardData } from "@/features/dashboard/data/mock-data";
 import { ProjectList } from "./project-list";
 
 const projectOptions = dashboardData.projects.map((project) => project.id);

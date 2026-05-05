@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { dashboardData } from "@/app/api/dashboard/mock-data";
+import { dashboardData } from "@/features/dashboard/data/mock-data";
 
 import { ChartPanel } from "../chart-panel/chart-panel";
 import { HealthTrendChart } from "./health-trend-chart";
