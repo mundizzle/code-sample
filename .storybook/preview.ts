@@ -33,7 +33,9 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          "Dashboard",
+          "Design System",
+          "Views",
+          ["Dashboard"],
           "Components",
           [
             "Header",
@@ -45,7 +47,6 @@ const preview: Preview = {
             "Projects",
             "Selected Project",
           ],
-          "Design System",
         ],
       },
     },

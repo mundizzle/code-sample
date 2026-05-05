@@ -5,7 +5,7 @@ import { AppProviders } from "@/app/providers";
 import { Dashboard } from "./dashboard";
 
 const meta = {
-  title: "Dashboard",
+  title: "Views/Dashboard",
   component: Dashboard,
   decorators: [
     (Story) => (

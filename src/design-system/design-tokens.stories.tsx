@@ -43,10 +43,6 @@ export const Colors: Story = {
   render: () => <TokenDocBlock categoryName="Colors" viewType="card" />,
 };
 
-export const ChartColors: Story = {
-  render: () => <TokenDocBlock categoryName="Chart Colors" viewType="card" />,
-};
-
 export const Radius: Story = {
   render: () => <TokenDocBlock categoryName="Radius" viewType="table" />,
 };
