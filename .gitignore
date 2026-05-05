@@ -17,7 +17,7 @@
 /.next/
 /out/
 /src/app/theme.css
-/src/design-system/design-tokens.tokens.css
+/src/tailwind-theme/tailwind-theme.tokens.css
 
 # production
 /build

@@ -13,7 +13,7 @@ This is a reference implementation for how I approach a modern front-end workflo
 
 - Next.js: React application framework
 - Tailwind CSS: Styling and theming
-- Storybook: Design system generator
+- Storybook: Design system & component documentation
 - ECharts: Data visualization
 - TanStack Query: Fetching, caching, and updating API data
 - Zustand: Client state management
@@ -89,7 +89,7 @@ npm run generate-tailwind-theme
 This reads the checked-in Figma token exports in `design-tokens/*.tokens.json` and rewrites ignored generated CSS files used by the app and Storybook:
 
 - `src/app/theme.css`
-- `src/design-system/design-tokens.tokens.css`
+- `src/tailwind-theme/tailwind-theme.tokens.css`
 
 The same generation step runs automatically before `dev`, `test`, `test:watch`, `storybook`, `build-storybook`, `build-storybook:public`, and `build`.
 

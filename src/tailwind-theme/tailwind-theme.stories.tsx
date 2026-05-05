@@ -29,7 +29,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Design tokens mirror the ad/* Figma variables and back the semantic Tailwind utilities used by the React dashboard.",
+          "The generated Tailwind theme mirrors the ad/* Figma variables and backs the semantic utilities used by the React dashboard.",
       },
     },
   },

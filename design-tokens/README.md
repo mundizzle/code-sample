@@ -7,7 +7,7 @@ Use this directory when changing foundational visual decisions. Components shoul
 - `light.tokens.json` defines the default appearance.
 - `dark.tokens.json` defines the `prefers-color-scheme: dark` overrides.
 - `scripts/generate-tailwind-theme.mjs` flattens the `ad/*` namespace.
-- Generated output lands in `src/app/theme.css` and `src/design-system/design-tokens.tokens.css`.
+- Generated output lands in `src/app/theme.css` and `src/tailwind-theme/tailwind-theme.tokens.css`.
 - Generated CSS is ignored by git and recreated by npm workflow hooks.
 - Run `npm run generate-tailwind-theme` after token changes.
 - Keep token names semantic and product-oriented: background, surface, text, border, accent, status, chart series.
