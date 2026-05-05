@@ -11,6 +11,7 @@ Use this directory for Storybook configuration. Stories should stay beside the c
 - The static build ships at `/storybook` in production.
 - Keep the navigation organized for browsing: Design System, Views, then Components.
 - Use MSW for realistic dashboard data in stories without adding backend scope.
+- Composed dashboard stories should wrap the view with `AppProviders`, `DashboardStoreProvider`, and `DashboardBoundary` so loading, error, retry, and query reset behavior match the app route.
 
 ## Standards
 

@@ -27,6 +27,12 @@ Core requirements:
 - Add tests for domain utilities, state behavior, dashboard behavior, data query/API behavior, chart option builders, and important accessibility/token contrast expectations.
 - Do not put visible product UI copy in the app that explains the implementation, tooling, Figma, Storybook, Zustand, ECharts, or that this is a code sample.
 
+Current architecture guardrails:
+- Keep `src/app/providers.tsx` focused on app-wide providers. The dashboard Zustand provider is route-local in `src/app/page.tsx` so `searchParams` can seed initial UI filters per request.
+- Keep dashboard data loading under `src/features/dashboard/dashboard-boundary.tsx`, which combines TanStack Query reset handling, a local React error boundary, and `Suspense`.
+- Keep `getDashboardData()` safe for server rendering. It should read deterministic fixtures on the server and use `/api/dashboard` from the browser.
+- Keep ECharts behind `next/dynamic` imports in the dashboard shell. Do not merge ECharts into the main dashboard module without checking production chunk output.
+
 Project skills:
 - This repo locks project-local skills in `skills-lock.json`. The generated `.agents/skills` directory is intentionally ignored.
 - Run `npm run skills:install` after installing dependencies to restore the local skill files.

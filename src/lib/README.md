@@ -6,7 +6,7 @@ Use this directory for small infrastructure adapters that keep browser-only or t
 
 - `echarts/e-chart.tsx` registers only the ECharts modules the dashboard uses.
 - `echarts/use-chart-palette.ts` reads CSS custom properties from the active theme.
-- `echarts/chart-palette.ts` provides the shared palette type and fallback values.
+- `echarts/chart-palette.ts` provides the shared palette type, fallback values, and CSS variable names used by the palette hook.
 - Visible chart components should pass pure options into the adapter.
 - Keep chart option builders in component folders so they stay easy to test without rendering ECharts.
 - Avoid putting domain rules or dashboard copy in this folder.
@@ -16,4 +16,5 @@ Use this directory for small infrastructure adapters that keep browser-only or t
 - Prefer thin adapters around third-party runtime behavior.
 - Prefer registering only the ECharts modules the dashboard actually uses.
 - Prefer reading visual values from generated CSS variables instead of duplicating token values in TypeScript.
+- Prefer keeping ECharts code-split from the dashboard shell unless a production bundle check proves the split is counterproductive.
 - Avoid mixing adapter code with chart option construction, dashboard data rules, or product copy.

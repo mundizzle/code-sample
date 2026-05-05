@@ -8,6 +8,8 @@ Use this directory for test environment setup and shared test utilities. Individ
 - React Testing Library tests use the jsdom environment.
 - Pure model and store tests should run without rendering the full app.
 - Dashboard tests should verify visible behavior and guard against implementation commentary leaking into product UI.
+- Dashboard render tests should use the same provider stack as the route: `QueryClientProvider`, route-local `DashboardStoreProvider`, and `DashboardBoundary`.
+- When asserting query behavior, remember `getDashboardData()` has separate server and browser paths: fixture read for SSR, `/api/dashboard` fetch for browser/client behavior.
 - Prefer behavior assertions over snapshots unless a snapshot adds clear review value.
 
 ## Standards

@@ -39,6 +39,16 @@ flowchart LR
   figma --> tokens --> theme --> app
 ```
 
+## Architecture Notes
+
+The dashboard route keeps the first screen focused on the product experience while still showing realistic application boundaries:
+
+- `src/app/layout.tsx` mounts app-wide providers. Today that is only the TanStack Query client provider.
+- `src/app/page.tsx` reads `searchParams` on the server and passes `?client=` into a route-local `DashboardStoreProvider` as initial Zustand state, so filtered dashboard URLs are shareable without making UI state global.
+- `src/features/dashboard/dashboard-boundary.tsx` wraps the dashboard with `QueryErrorResetBoundary`, a local React error boundary, and `Suspense`. This keeps TanStack Query loading and retry behavior explicit in the app, Storybook, and tests.
+- `src/features/dashboard/data/query/dashboard-query.ts` uses the fixture directly during server render and fetches `/api/dashboard` in the browser. The route still exists as the mock API boundary and Storybook mirrors it with MSW.
+- Chart components stay code-split with `next/dynamic`; ECharts setup lives in `src/lib/echarts`, while chart option builders stay pure and tested beside the visible chart components.
+
 ---
 
 ## Local setup instructions
