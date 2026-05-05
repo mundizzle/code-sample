@@ -1,76 +1,60 @@
-# Agency Delivery Dashboard
+# About this project
 
-This is a coded reference implementation for how I think a modern front-end workflow should fit together: conventional framework choices, design tokens wired into code, responsive UI, Storybook documentation, clear state boundaries, charting, and focused tests.
+This is a reference implementation for how I approach a modern front-end workflow and delivery in a consulting context. It uses conventional framework choices, a shared language across design and development, and documentation generated from code. The goal is to deliver something that is easy to comprehend and build upon.
 
-The goal is not to show every possible feature. It is to show a front-end architecture that is easy to inspect, easy to explain, and realistic enough to hold up under application-style complexity.
+## Key Components
 
-## Key Links
+- Source: https://github.com/mundizzle/code-sample
+- Design: https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample
+- Design System: https://code-sample-three.vercel.app/storybook
+- Live App: https://code-sample-three.vercel.app
 
-- [Live application](https://code-sample-three.vercel.app)
-- [Storybook design system](https://code-sample-three.vercel.app/storybook?path=/story/views-dashboard--default)
-- [Figma reference](https://www.figma.com/design/tIvu2Q2HhCLDTNmpnVr5FC/Code-Sample?node-id=16-3)
-- [Source code](https://github.com/mundizzle/code-sample)
+## Built Using
 
-![Desktop dashboard view](.github/readme-assets/dashboard-desktop.png)
+- Next.js: React application framework
+- Tailwind CSS: Styling and theming
+- Storybook: Design system generator
+- ECharts: Data visualization
+- TanStack Query: Fetching, caching, and updating API data
+- Zustand: Client state management
 
-## Workflow Overview
+![Application Screenshot](.github/readme-assets/dashboard-desktop.png)
+*Application screenshot*
 
-The through-line is design-to-dev continuity. Figma-style tokens are committed as JSON, generated into Tailwind-ready CSS variables, consumed by the React dashboard, documented in Storybook, and shipped through the same Vercel deployment path.
+## Process Overview
+
+What a demo like this cannot simulate is the upfront planning required to align stakeholders across client, product, design, and dev. In my experience, that's one of the biggest keys to success for any project.
+
+That said, I try to carry that same idea into the design-to-dev workflow, where the output is actually created. This is driven by design tokens: a shared language that can be used natively by designers, developers, design tools, and code.
+
+In this example, Figma holds the source of truth for the design values expressed in tokens. They are exported from Figma and translated directly into Tailwind CSS variables without a manual handoff. Updates to design in Figma can cascade through to live code by re-exporting and regenerating the theme. Even that process can be automated for a real project.
 
 ```mermaid
 flowchart LR
-  figma["Figma Variables"]
-  tokens["Token JSON<br/>design-tokens/*.tokens.json"]
-  theme["Generated Tailwind theme<br/>src/app/theme.css"]
-  ui["Semantic Tailwind utilities<br/>ad-*"]
-  app["Responsive React dashboard"]
-  storybook["Storybook component system"]
-  deploy["Vercel deployment"]
+  figma["Figma"]
+  tokens["Design tokens"]
+  theme["Tailwind theme"]
+  app["Live app"]
 
-  figma --> tokens --> theme --> ui --> app
-  ui --> storybook
-  app --> deploy
-  storybook --> deploy
+  figma --> tokens --> theme --> app
 ```
 
-The subfolder READMEs explain the pieces in more detail. The root README is meant to give the quick mental model first: one connected workflow from design source, to implementation, to review surface, to deployment.
+---
 
-## What To Look For
+## Local setup instructions
 
-- Design tokens move from Figma-style JSON exports into Tailwind CSS variables.
-- Storybook gives the dashboard components and token system a review surface outside the app.
-- TanStack Query owns fixture-backed server state, while Zustand owns UI-only state.
-- ECharts is isolated behind a small adapter, with chart option builders kept pure and tested.
-- The app is responsive, token-backed, and deployed through the same repo flow reviewers can inspect.
-
-## Project Map
-
-| Area | What to inspect |
-| --- | --- |
-| [`design-tokens/`](design-tokens/README.md) | Figma-style token exports for light and dark appearance. |
-| [`scripts/`](scripts/README.md) | Build helpers for token generation and deployed Storybook. |
-| [`.storybook/`](.storybook/README.md) | Storybook configuration, theme preview, MSW mocks, and navigation. |
-| [`src/app/`](src/app/README.md) | Next.js App Router shell, providers, generated theme CSS, and dashboard API route. |
-| [`src/components/`](src/components/README.md) | Visible dashboard components, chart components, and component stories. |
-| [`src/data/`](src/data/README.md) | TanStack Query boundary and Storybook mock service worker handlers. |
-| [`src/design-system/`](src/design-system/README.md) | Token documentation rendered inside Storybook. |
-| [`src/lib/`](src/lib/README.md) | Internal adapters, currently the ECharts bridge. |
-| [`src/model/`](src/model/README.md) | Domain types, labels, formatters, and pure dashboard logic. |
-| [`src/state/`](src/state/README.md) | Zustand store for local dashboard UI state. |
-| [`src/test/`](src/test/README.md) | Vitest and React Testing Library setup. |
-
-## Prerequisites
+### Prerequisites
 
 - Node.js 20 or newer
 - npm
 
-## Install
+### Install
 
 ```bash
 npm install
 ```
 
-## Run The App
+### Run the App
 
 ```bash
 npm run dev
@@ -78,7 +62,7 @@ npm run dev
 
 Open http://localhost:3000.
 
-## Run Storybook
+### Run Storybook
 
 ```bash
 npm run storybook
@@ -86,7 +70,7 @@ npm run storybook
 
 Open http://localhost:6006.
 
-## Regenerate Tokens
+### Regenerate Tokens
 
 ```bash
 npm run generate-tailwind-theme
@@ -94,7 +78,7 @@ npm run generate-tailwind-theme
 
 This reads `design-tokens/*.tokens.json` and rewrites `src/app/theme.css`.
 
-## Validate And Build
+## Validate and Build
 
 ```bash
 npm run test
@@ -104,6 +88,6 @@ npm run build
 
 `npm run build` also regenerates the Tailwind theme bridge and builds static Storybook into `public/storybook` before running `next build`.
 
-## Deployment
+### Deployment
 
 Vercel is connected to the GitHub repo. Pushes to `main` deploy the app, and the static Storybook build ships with it at `/storybook`.
