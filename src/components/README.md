@@ -1,23 +1,15 @@
 # Components
 
-## What this is
-
 These are the visible dashboard building blocks: header, filters, metrics, charts, project list, and selected project detail. The folder is organized by what each component represents, not by a generic catch-all bucket.
 
-## Why it exists
-
-- Component ownership is easier to follow when the folder names match the UI.
-- Stories sit beside reusable components so Storybook stays close to the implementation.
-- Chart components own their option builders and tests, while ECharts itself stays in `src/lib`.
-- The composed dashboard can stay focused on data flow and layout rather than component internals.
-
-## How it works
+Use this directory for UI components that render dashboard experience. Keep data fetching in the app/data layer, domain logic in `src/model`, and chart runtime wiring in `src/lib`.
 
 - `chart-panel/` provides the reusable shell used around visible charts.
 - `health-trend-chart/` and `risk-distribution-chart/` own their chart components, option builders, tests, and stories.
 - `filters/`, `projects/`, and `selected-project/` handle interactive dashboard controls and detail views.
-- Components use semantic `ad-*` Tailwind utilities generated from design tokens.
-- Reusable components have component-level Storybook stories under `Components/...`.
+- Use semantic `ad-*` Tailwind utilities generated from design tokens instead of raw color, radius, or spacing values.
+- Keep component-level Storybook stories beside reusable components under `Components/...`.
+- Keep chart option builders pure and covered by tests in the chart component folder.
 
 ## Example
 
@@ -28,9 +20,3 @@ These are the visible dashboard building blocks: header, filters, metrics, chart
   <div className="mt-3">{children}</div>
 </section>
 ```
-
-## Related
-
-- [`../lib/README.md`](../lib/README.md)
-- [`../model/README.md`](../model/README.md)
-- [`../../.storybook/README.md`](../../.storybook/README.md)

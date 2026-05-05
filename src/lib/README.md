@@ -1,22 +1,15 @@
 # Lib
 
-## What this is
-
 This folder is for internal implementation adapters that support the app but are not visible product components. Right now that means the ECharts bridge.
 
-## Why it exists
-
-- Browser-only libraries should not leak through the component tree.
-- ECharts setup, resize behavior, and token palette reading are infrastructure concerns.
-- Chart option builders stay pure and testable in component folders.
-- Keeping the adapter small makes the charting decision easy to inspect.
-
-## How it works
+Use this directory for small infrastructure adapters that keep browser-only or third-party library details away from product components.
 
 - `echarts/e-chart.tsx` registers only the ECharts modules the dashboard uses.
 - `echarts/use-chart-palette.ts` reads CSS custom properties from the active theme.
 - `echarts/chart-palette.ts` provides the shared palette type and fallback values.
-- Visible chart components pass pure options into the adapter.
+- Visible chart components should pass pure options into the adapter.
+- Keep chart option builders in component folders so they stay easy to test without rendering ECharts.
+- Avoid putting domain rules or dashboard copy in this folder.
 
 ## Example
 
@@ -34,9 +27,3 @@ const cssVariableNames = {
   ],
 } as const;
 ```
-
-## Related
-
-- [`../components/README.md`](../components/README.md)
-- [`../design-system/README.md`](../design-system/README.md)
-- [`../../design-tokens/README.md`](../../design-tokens/README.md)
