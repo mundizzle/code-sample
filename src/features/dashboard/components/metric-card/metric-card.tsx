@@ -20,12 +20,14 @@ export function MetricCard({
   return (
     <article className="min-h-28 w-full min-w-0 rounded-ad-md border border-ad-border bg-ad-surface p-5">
       <div className="flex items-start justify-between gap-4">
-        <p className="text-3xl font-semibold text-ad-text">{value}</p>
+        <dl className="flex flex-col">
+          <dt className="order-2 mt-3 text-sm text-ad-text-muted">{label}</dt>
+          <dd className="order-1 text-3xl font-semibold text-ad-text">{value}</dd>
+        </dl>
         <p className={`text-sm font-semibold ${deltaToneClasses[deltaTone]}`}>
           {delta}
         </p>
       </div>
-      <p className="mt-3 text-sm text-ad-text-muted">{label}</p>
     </article>
   );
 }

@@ -11,6 +11,11 @@ export const dashboardKeys = {
 };
 
 export async function getDashboardData(): Promise<DashboardData> {
+  if (typeof window === "undefined") {
+    const { dashboardData } = await import("../mock-data");
+    return structuredClone(dashboardData);
+  }
+
   const response = await fetch(dashboardEndpoint);
 
   if (!response.ok) {

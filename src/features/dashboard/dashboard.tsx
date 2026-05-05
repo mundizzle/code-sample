@@ -1,11 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { dashboardDataQueryOptions } from "./data/query/dashboard-query";
 import { useDashboardStore } from "./state/dashboard-store-provider";
-import type { DashboardData } from "./model/types";
 import {
   aggregateDashboardMetrics,
   buildDashboardDataSlice,
@@ -26,7 +25,6 @@ const HealthTrendChart = dynamic(
       (module) => module.HealthTrendChart,
     ),
   {
-    ssr: false,
     loading: () => <ChartLoading label="Loading health trend chart..." />,
   },
 );
@@ -37,17 +35,12 @@ const RiskDistributionChart = dynamic(
       (module) => module.RiskDistributionChart,
     ),
   {
-    ssr: false,
     loading: () => <ChartLoading label="Loading risk distribution chart..." />,
   },
 );
 
 export function Dashboard() {
-  const {
-    data = emptyDashboardData,
-    isError,
-    isLoading,
-  } = useQuery(dashboardDataQueryOptions());
+  const { data } = useSuspenseQuery(dashboardDataQueryOptions());
   const selectedProjectId = useDashboardStore((state) => state.selectedProjectId);
   const filters = useDashboardStore((state) => state.filters);
   const toggleClientFilter = useDashboardStore((state) => state.toggleClientFilter);
@@ -77,40 +70,8 @@ export function Dashboard() {
     comparison.launchesThisMonth,
   );
   const selectedProject =
-    data.projects.find((project) => project.id === selectedProjectId) ??
-    data.projects[0];
-
-  if (isLoading) {
-    return (
-      <main className="min-h-screen bg-ad-bg text-ad-text">
-        <div className="mx-auto box-border flex w-full max-w-[1440px] flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-          <DashboardHeader />
-          <section
-            aria-label="Dashboard loading"
-            className="rounded-ad-md border border-ad-border bg-ad-surface p-5 text-sm text-ad-text-muted"
-          >
-            Loading dashboard...
-          </section>
-        </div>
-      </main>
-    );
-  }
-
-  if (isError) {
-    return (
-      <main className="min-h-screen bg-ad-bg text-ad-text">
-        <div className="mx-auto box-border flex w-full max-w-[1440px] flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-          <DashboardHeader />
-          <section
-            aria-label="Dashboard error"
-            className="rounded-ad-md border border-ad-border bg-ad-surface p-5 text-sm text-ad-danger"
-          >
-            Unable to load dashboard data.
-          </section>
-        </div>
-      </main>
-    );
-  }
+    visibleProjects.find((project) => project.id === selectedProjectId) ??
+    visibleProjects[0];
 
   return (
     <main className="min-h-screen bg-ad-bg text-ad-text">
@@ -189,24 +150,6 @@ export function Dashboard() {
     </main>
   );
 }
-
-const emptyDashboardData: DashboardData = {
-  reporting: {
-    currentMonth: "2026-05-01",
-    comparison: {
-      activeProjects: 0,
-      deliveryHealthPercent: 0,
-      openRisks: 0,
-      launchesThisMonth: 0,
-    },
-  },
-  clients: [],
-  projects: [],
-  milestones: [],
-  risks: [],
-  weeklyMetrics: [],
-  teamAllocations: [],
-};
 
 function ChartLoading({ label }: { label: string }) {
   return (

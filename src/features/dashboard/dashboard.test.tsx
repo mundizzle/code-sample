@@ -3,16 +3,23 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { DashboardBoundary } from "./dashboard-boundary";
 import { createDashboardQueryClient } from "./data/query/dashboard-query";
 import { dashboardData } from "@/features/dashboard/data/mock-data";
+import {
+  defaultDashboardState,
+  type DashboardUiState,
+} from "./state/dashboard-store";
 import { DashboardStoreProvider } from "./state/dashboard-store-provider";
 import { Dashboard } from "./dashboard";
 
-function renderDashboard() {
+function renderDashboard(initialState?: DashboardUiState) {
   return render(
     <QueryClientProvider client={createDashboardQueryClient()}>
-      <DashboardStoreProvider>
-        <Dashboard />
+      <DashboardStoreProvider initialState={initialState}>
+        <DashboardBoundary>
+          <Dashboard />
+        </DashboardBoundary>
       </DashboardStoreProvider>
     </QueryClientProvider>,
   );
@@ -123,7 +130,41 @@ describe("Dashboard", () => {
     const projectList = screen.getByRole("region", { name: "Projects" });
     expect(within(projectList).getByText("Care Pathways")).toBeInTheDocument();
     expect(within(projectList).getByText("1 of 5 shown")).toBeInTheDocument();
+    const detail = screen.getByRole("region", { name: "Selected Project" });
+    expect(within(detail).getByText("Care Pathways")).toBeInTheDocument();
+    expect(within(detail).getByText("Owner: Jordan Lee")).toBeInTheDocument();
     expect(screen.getByText("96%")).toBeInTheDocument();
+  });
+
+  it("keeps the selected project coherent with initial and changed client filters", async () => {
+    const user = userEvent.setup();
+    renderDashboard({
+      ...defaultDashboardState,
+      filters: {
+        ...defaultDashboardState.filters,
+        clientIds: ["client-market-lane"],
+      },
+    });
+
+    await screen.findAllByText("Marketplace Refresh");
+    expect(
+      screen.getByRole("button", { name: "Market Lane", pressed: true }),
+    ).toBeInTheDocument();
+
+    let detail = screen.getByRole("region", { name: "Selected Project" });
+    expect(within(detail).getByText("Marketplace Refresh")).toBeInTheDocument();
+    expect(within(detail).getByText("Owner: Priya Shah")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Market Lane", pressed: true }));
+    await user.click(screen.getByRole("button", { name: "Northstar Health" }));
+
+    const projectList = screen.getByRole("region", { name: "Projects" });
+    expect(within(projectList).getByText("Care Pathways")).toBeInTheDocument();
+    expect(within(projectList).queryByText("Resident Services Hub")).not.toBeInTheDocument();
+
+    detail = screen.getByRole("region", { name: "Selected Project" });
+    expect(within(detail).getByText("Care Pathways")).toBeInTheDocument();
+    expect(within(detail).getByText("Owner: Jordan Lee")).toBeInTheDocument();
   });
 
   it("stacks client controls in narrow containers and lets them wrap in wide containers", async () => {

@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import type { Risk } from "../../model/types";
 
 import { EChart } from "@/lib/echarts/e-chart";
@@ -16,13 +18,21 @@ export type RiskDistributionChartProps = {
 
 export function RiskDistributionChart({ risks }: RiskDistributionChartProps) {
   const chartPalette = useChartPalette();
+  const accessibleDescription = useMemo(
+    () => buildRiskDistributionAccessibleDescription(risks),
+    [risks],
+  );
+  const option = useMemo(
+    () => buildRiskDistributionOption(risks, chartPalette),
+    [chartPalette, risks],
+  );
 
   return (
     <EChart
-      accessibleDescription={buildRiskDistributionAccessibleDescription(risks)}
+      accessibleDescription={accessibleDescription}
       ariaLabel="Open risk distribution by severity"
       className="h-72 w-full sm:h-56"
-      option={buildRiskDistributionOption(risks, chartPalette)}
+      option={option}
     />
   );
 }

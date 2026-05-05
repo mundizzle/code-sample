@@ -3,22 +3,10 @@
 import { useEffect, useState } from "react";
 
 import {
+  cssVariableNames,
   dashboardChartPalette,
   type ChartPalette,
 } from "./chart-palette";
-
-const cssVariableNames = {
-  text: "--ad-color-text",
-  textMuted: "--ad-color-text-muted",
-  border: "--ad-color-border",
-  surfaceElevated: "--ad-color-surface-elevated",
-  series: [
-    "--ad-chart-series-1",
-    "--ad-chart-series-2",
-    "--ad-chart-series-3",
-    "--ad-chart-series-4",
-  ],
-} as const;
 
 export function useChartPalette(): ChartPalette {
   const [palette, setPalette] = useState(dashboardChartPalette);
@@ -26,14 +14,14 @@ export function useChartPalette(): ChartPalette {
   useEffect(() => {
     const updatePalette = () => setPalette(readChartPalette());
 
+    updatePalette();
+
     if (typeof window.matchMedia !== "function") {
-      updatePalette();
       return;
     }
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
 
-    updatePalette();
     media.addEventListener("change", updatePalette);
 
     return () => media.removeEventListener("change", updatePalette);

@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import type { WeeklyMetric } from "../../model/types";
 
 import { EChart } from "@/lib/echarts/e-chart";
@@ -16,12 +18,20 @@ export type HealthTrendChartProps = {
 
 export function HealthTrendChart({ metrics }: HealthTrendChartProps) {
   const chartPalette = useChartPalette();
+  const accessibleDescription = useMemo(
+    () => buildHealthTrendAccessibleDescription(metrics),
+    [metrics],
+  );
+  const option = useMemo(
+    () => buildHealthTrendOption(metrics, chartPalette),
+    [chartPalette, metrics],
+  );
 
   return (
     <EChart
-      accessibleDescription={buildHealthTrendAccessibleDescription(metrics)}
+      accessibleDescription={accessibleDescription}
       ariaLabel="Weekly delivery health scores"
-      option={buildHealthTrendOption(metrics, chartPalette)}
+      option={option}
     />
   );
 }
